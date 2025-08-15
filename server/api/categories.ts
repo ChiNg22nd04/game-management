@@ -1,22 +1,24 @@
+// server/api/categories.ts
 import { db } from "../utils/firebase-admin";
 import { defineEventHandler } from "h3";
 
 export default defineEventHandler(async (event) => {
     try {
-        const testCollection = db.collection("test");
-        const testDoc = await testCollection.doc("connection-test").get();
+        const categoriesCollection = db.collection("categories");
+        const snapshot = await categoriesCollection.get();
+
+        const categories = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
 
         return {
             success: true,
-            message: "Firebase connection successful",
-            exists: testDoc.exists,
-            timestamp: new Date().toISOString(),
+            data: categories,
         };
     } catch (error) {
-        // If there's an error, return it
         return {
             success: false,
-            message: "Firebase connection failed",
             error: error instanceof Error ? error.message : String(error),
         };
     }
