@@ -1,7 +1,7 @@
 <template>
-    <h1>Hello Game</h1>
+    <h1>Hello</h1>
 </template>
 
 <script setup>
-console.log("Hello Game");
+console.log("Hello");
 </script>
