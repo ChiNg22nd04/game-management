@@ -29,18 +29,29 @@
                                     <label for="gameCategory">Catetory</label>
                                 </td>
                                 <td class="px-6 py-4 inline-block">
-                                    <select
-                                        v-model="gameForm.categoryId"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-sm"
-                                    >
-                                        <option
-                                            v-for="category in categories"
-                                            :key="category.id"
-                                            :value="category.id"
+                                    <div class="relative">
+                                        <select
+                                            v-model="gameForm.categoryId"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-sm appearance-none"
                                         >
-                                            {{ category.name }}
-                                        </option>
-                                    </select>
+                                            <option
+                                                v-for="category in categories"
+                                                :key="category.id"
+                                                :value="category.id"
+                                            >
+                                                {{ category.name }}
+                                            </option>
+                                        </select>
+                                        <span
+                                            class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400"
+                                        >
+                                            <Icon
+                                                name="angle-down"
+                                                prefix="fas"
+                                                class="h-4 w-4 inline-block"
+                                            />
+                                        </span>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -232,6 +243,7 @@ import { useRouter, useRoute } from "vue-router";
 import { useCategories } from "@/composables/useCategories";
 import { useGameForm } from "@/composables/useGameForm";
 import { LANGUAGES } from "@/composables/languages";
+import Icon from "@/components/Icon.vue";
 
 const router = useRouter();
 const route = useRoute();

@@ -10,15 +10,12 @@ import {
     faAngleDown,
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-// import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 // Ngăn Font Awesome tự thêm CSS mặc định
 config.autoAddCss = false;
 
-// Thêm icon vào library
 library.add(faPlus, faSearch, faAngleDown, faTrash);
 
 export default defineNuxtPlugin((nuxtApp) => {
-    // Đăng ký component toàn cục
     nuxtApp.vueApp.component("FontAwesomeIcon", FontAwesomeIcon);
 });
