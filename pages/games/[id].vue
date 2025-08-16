@@ -64,7 +64,7 @@
                                         id="gameId"
                                         v-model="gameForm.id"
                                         type="text"
-                                        class="px-3 py-2 border border-gray-300 rounded-sm w-48"
+                                        class="px-3 py-2 border border-gray-300 rounded-sm w-full"
                                         :disabled="true"
                                     />
                                 </td>
