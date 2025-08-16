@@ -29,19 +29,28 @@
                                     <label for="gameCategory">Catetory</label>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <select
-                                        id="gameCategory"
-                                        v-model="gameForm.categoryId"
-                                        class="w-40 px-3 py-2 border border-gray-300 rounded-sm"
-                                    >
-                                        <option
-                                            v-for="category in categories"
-                                            :key="category.id"
-                                            :value="category.id"
+                                    <div class="relative inline-block">
+                                        <select
+                                            v-model="selectedCategory"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-sm appearance-none pr-8"
                                         >
-                                            {{ category.name }}
-                                        </option>
-                                    </select>
+                                            <option
+                                                v-for="category in categories"
+                                                :key="category.id"
+                                                :value="category.id"
+                                            >
+                                                {{ category.name }}
+                                            </option>
+                                        </select>
+                                        <span
+                                            class="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                                        >
+                                            <Icon
+                                                name="angle-down"
+                                                class="h-4 w-4 inline-block ml-1"
+                                            />
+                                        </span>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -55,7 +64,7 @@
                                         id="gameId"
                                         v-model="gameForm.id"
                                         type="text"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-sm"
+                                        class="px-3 py-2 border border-gray-300 rounded-sm"
                                         :disabled="true"
                                     />
                                 </td>
