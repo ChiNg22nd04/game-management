@@ -28,29 +28,19 @@
                                 >
                                     <label for="gameCategory">Catetory</label>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="relative inline-block">
-                                        <select
-                                            v-model="selectedCategory"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-sm appearance-none pr-8"
+                                <td class="px-6 py-4 inline-block">
+                                    <select
+                                        v-model="gameForm.categoryId"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-sm"
+                                    >
+                                        <option
+                                            v-for="category in categories"
+                                            :key="category.id"
+                                            :value="category.id"
                                         >
-                                            <option
-                                                v-for="category in categories"
-                                                :key="category.id"
-                                                :value="category.id"
-                                            >
-                                                {{ category.name }}
-                                            </option>
-                                        </select>
-                                        <span
-                                            class="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-                                        >
-                                            <Icon
-                                                name="angle-down"
-                                                class="h-4 w-4 inline-block ml-1"
-                                            />
-                                        </span>
-                                    </div>
+                                            {{ category.name }}
+                                        </option>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
@@ -237,10 +227,11 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useCategories } from "@/composables/useCategories";
 import { useGameForm } from "@/composables/useGameForm";
+import { LANGUAGES } from "@/composables/languages";
 
 const router = useRouter();
 const route = useRoute();
@@ -254,59 +245,42 @@ const {
 } = useCategories();
 const { gameForm, isLoading, error, updateGame } = useGameForm();
 
+const loadGame = async (id) => {
+    try {
+        const res = await fetch(`/api/games/${id}`);
+        const result = await res.json();
+        if (!result.success) {
+            error.value = result.error || "Game not found";
+            return;
+        }
+
+        const languages = (result.data.name || []).map((item) => {
+            const lang = item.language;
+            const found = LANGUAGES.find((l) => l.code === lang.code);
+            return {
+                code: lang.code,
+                name: found?.name || lang.code,
+                isDefault: item.isDefaut === "true" || item.isDefault === true,
+                nameValue: lang.value || "",
+            };
+        });
+
+        gameForm.value = {
+            id: result.data.id,
+            categoryId: result.data.categoryId,
+            languages: languages.length
+                ? languages
+                : [{ ...LANGUAGES[0], isDefault: true, nameValue: "" }],
+        };
+    } catch {
+        error.value = "Error loading game data";
+    }
+};
+
 onMounted(async () => {
     await fetchCategories();
-    if (gameId) {
-        try {
-            const response = await fetch(`/api/games/${gameId}`);
-            const result = await response.json();
-            if (result.success) {
-                const languages = (result.data.name || []).map((item) => {
-                    const lang = item.language;
-                    const code = lang.code;
-                    const value = lang.value || "";
-                    const isDefault =
-                        item.isDefaut === "true" || item.isDefault === true;
-                    let name =
-                        code === "JA"
-                            ? "Japanese"
-                            : code === "EN"
-                            ? "English"
-                            : code === "KO"
-                            ? "Korean"
-                            : code;
-                    return {
-                        code,
-                        name,
-                        isDefault,
-                        nameValue: value,
-                    };
-                });
-                gameForm.value = {
-                    id: result.data.id,
-                    categoryId: result.data.categoryId,
-                    languages:
-                        languages.length > 0
-                            ? languages
-                            : [
-                                  {
-                                      code: "EN",
-                                      name: "English",
-                                      isDefault: true,
-                                      nameValue: "",
-                                  },
-                              ],
-                };
-            } else {
-                error.value = result.error || "Game not found";
-            }
-        } catch (err) {
-            error.value = "Error loading game data";
-        }
-    }
+    if (gameId) await loadGame(gameId);
 });
 
-function cancel() {
-    router.push("/games");
-}
+const cancel = () => router.push("/games");
 </script>
