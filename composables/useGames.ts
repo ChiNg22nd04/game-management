@@ -1,34 +1,19 @@
 import { ref, computed, onMounted } from "vue";
 
 export function useGames() {
-    const games = ref([]);
-    const categories = ref([]);
+    const games = ref<any[]>([]);
     const isLoading = ref(true);
-    const error = ref(null);
+    const error = ref<string | null>(null);
 
     const searchQuery = ref("");
     const selectedCategory = ref("");
     const currentPage = ref(1);
     const itemsPerPage = ref(5);
-    const selectedGames = ref([]);
+    const selectedGames = ref<string[]>([]);
 
     const showDeleteModal = ref(false);
     const deleteModalMessage = ref("");
-    const pendingDeleteIds = ref([]);
-
-    // Fetch categories
-    const fetchCategories = async () => {
-        try {
-            const res = await fetch("/api/categories");
-            const result = await res.json();
-
-            console.log("Categories fetched:", result);
-
-            if (result.success) categories.value = result.data;
-        } catch (err) {
-            console.error(err);
-        }
-    };
+    const pendingDeleteIds = ref<string[]>([]);
 
     // Fetch games
     const fetchGames = async () => {
@@ -39,8 +24,11 @@ export function useGames() {
 
             console.log("Games fetched:", result);
 
-            if (result.success) games.value = result.data;
-            else error.value = result.error;
+            if (result.success) {
+                games.value = result.data || [];
+            } else {
+                error.value = result.error || "Unknown error";
+            }
         } catch (err) {
             error.value = "Failed to fetch games";
             console.error("Error fetching games:", err);
@@ -49,33 +37,34 @@ export function useGames() {
         }
     };
 
-    // Game name
     const getGameName = (game: any): string => {
-        if (!Array.isArray(game.name) || game.name.length === 0)
-            return "Unknown";
-
-        const defaultLang = game.name.find((n) => n.isDefaut === "true");
-
+        if (!Array.isArray(game.name) || game.name.length === 0) return "";
+        const defaultLang = game.name.find((n: any) => n.isDefaut === "true");
         return (
-            defaultLang?.language?.value || game.name[0]?.language?.value || ""
+            defaultLang?.language?.value ||
+            game.name[0]?.language?.value ||
+            ""
         );
     };
 
-    const getCategoryName = (categoryId) => {
-        const cat = categories.value.find((c) => c.id === categoryId);
-        return cat ? cat.name : "Không có danh mục";
+    // Category name (lấy từ object `category`)
+    const getCategoryName = (game: any): string => {
+        console.log("Game.categoryId:", game.categoryId);
+        return game?.category?.name || "Không có danh mục";
     };
 
     // Filtering
     const filteredGames = computed(() => {
-        return games.value.filter((game) => {
+        return (games.value || []).filter((game) => {
             const name = getGameName(game);
             const matchesSearch = name
                 .toLowerCase()
                 .includes(searchQuery.value.toLowerCase());
+
             const matchesCategory =
                 !selectedCategory.value ||
                 game.categoryId === selectedCategory.value;
+
             return matchesSearch && matchesCategory;
         });
     });
@@ -91,18 +80,21 @@ export function useGames() {
             start,
             start + itemsPerPage.value
         );
+
         console.log(`Paginated games (page ${currentPage.value}):`, pageData);
+
         return pageData;
     });
 
     // Selection logic
-    const isGameSelected = (id) => selectedGames.value.includes(id);
+    const isGameSelected = (id: string) => selectedGames.value.includes(id);
 
-    const toggleGameSelection = (id) => {
-        const idx = selectedGames.value.indexOf(id);
-        if (idx === -1) selectedGames.value.push(id);
-        else selectedGames.value.splice(idx, 1);
-        console.log("Selected games after toggle:", selectedGames.value);
+    const toggleGameSelection = (id: string) => {
+        if (isGameSelected(id)) {
+            selectedGames.value = selectedGames.value.filter((gid) => gid !== id);
+        } else {
+            selectedGames.value.push(id);
+        }
     };
 
     const isAllSelected = computed(
@@ -113,16 +105,14 @@ export function useGames() {
 
     const toggleSelectAll = () => {
         if (isAllSelected.value) {
-            paginatedGames.value.forEach((g) =>
-                selectedGames.value.splice(selectedGames.value.indexOf(g.id), 1)
-            );
+          selectedGames.value = selectedGames.value.filter(
+            (id) => !paginatedGames.value.some((g) => g.id === id)
+          );
         } else {
-            paginatedGames.value.forEach((g) => {
-                if (!selectedGames.value.includes(g.id))
-                    selectedGames.value.push(g.id);
-            });
+          paginatedGames.value.forEach((g) => {
+            if (!isGameSelected(g.id)) selectedGames.value.push(g.id);
+          });
         }
-        console.log("Selected games after toggle all:", selectedGames.value);
     };
 
     const clearSelection = () => {
@@ -137,11 +127,13 @@ export function useGames() {
         showDeleteModal.value = true;
         console.log("Confirm delete for ids:", pendingDeleteIds.value);
     };
+
     const closeDeleteModal = () => {
         showDeleteModal.value = false;
         pendingDeleteIds.value = [];
         console.log("Delete modal closed");
     };
+
     const executeDelete = async () => {
         if (pendingDeleteIds.value.length === 0) return;
         try {
@@ -172,13 +164,12 @@ export function useGames() {
     };
 
     onMounted(async () => {
-        console.log("Component mounted, fetching data...");
-        await Promise.all([fetchCategories(), fetchGames()]);
+        console.log("Component mounted, fetching games...");
+        await fetchGames();
     });
 
     return {
         games,
-        categories,
         isLoading,
         error,
         searchQuery,
