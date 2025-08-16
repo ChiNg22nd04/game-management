@@ -32,7 +32,7 @@
                                     <div class="relative">
                                         <select
                                             v-model="gameForm.categoryId"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-sm appearance-none"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-sm appearance-none pr-8"
                                         >
                                             <option
                                                 v-for="category in categories"
@@ -47,8 +47,7 @@
                                         >
                                             <Icon
                                                 name="angle-down"
-                                                prefix="fas"
-                                                class="h-4 w-4 inline-block"
+                                                class="h-4 w-4 inline-block ml-1 text-black"
                                             />
                                         </span>
                                     </div>
