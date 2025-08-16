@@ -14,7 +14,7 @@ export function useCategories() {
             } else {
                 error.value = result.error;
             }
-        } catch (err) {
+        } catch (_err) {
             error.value = "Failed to fetch categories";
         } finally {
             isLoading.value = false;

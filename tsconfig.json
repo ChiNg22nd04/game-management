@@ -13,6 +13,10 @@
     "server/**/*.ts",
     "server/api/games/update.ts.doc",
     "server/api/games/delete.ts.d",
-    "server/api/games/create.ts.doc"
+    "server/api/games/create.ts.doc",
+    "nuxt.config.ts",
+    "vite.config.ts",
+    "**/*.vue",
+    "**/*.ts"
   ]
 }

@@ -25,7 +25,7 @@ export function useGameForm(initialData = null) {
             if (!result.success) {
                 error.value = result.error || "Failed to update game";
             }
-        } catch (err) {
+        } catch (_err) {
             error.value = "Error updating game";
         } finally {
             isLoading.value = false;

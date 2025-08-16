@@ -1,67 +1,72 @@
 <template>
-    <div class="border border-gray-300 overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-300">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="px-6 py-3 text-center border-r border-gray-300">
-                        <input
-                            type="checkbox"
-                            :checked="isAllSelected"
-                            @change="toggleSelectAll"
-                        />
-                    </th>
-                    <th class="px-6 py-3 text-left border-r border-gray-300">
-                        ID
-                    </th>
-                    <th class="px-6 py-3 text-left border-r border-gray-300">
-                        Name
-                    </th>
-                    <th class="px-6 py-3 text-left">Category</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-300">
-                <tr
-                    v-for="game in paginatedGames"
-                    :key="game.id"
-                    @click="navigateToEditGame(game.id)"
-                    :class="{ 'bg-gray-100': game.id % 2 === 0 }"
-                >
-                    <td class="px-6 py-4 text-center border-r border-gray-300">
-                        <input
-                            type="checkbox"
-                            :checked="isGameSelected(game.id)"
-                            @change="toggleGameSelection(game.id)"
-                        />
-                    </td>
-                    <td
-                        class="px-6 py-4 border-r border-gray-300 flex items-center"
-                    >
-                        <span class="mr-1">{{ game.id }}</span>
-                        <button
-                            @click="$emit('edit', game.id)"
-                            class="text-gray-400"
-                        >
-                            <FontAwesomeIcon
-                                :icon="['fas', 'pen']"
-                                class="h-4 w-4"
-                            />
-                        </button>
-                    </td>
-                    <td class="px-6 py-4 border-r border-gray-300">
-                        {{ getGameName(game) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ getCategoryName(game.categoryId) }}
-                    </td>
-                </tr>
-                <tr v-if="paginatedGames.length === 0">
-                    <td colspan="4" class="px-6 py-4 text-center">
-                        No games found
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="border border-gray-300 overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-300">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="px-6 py-3 text-center border-r border-gray-300">
+            <input
+              type="checkbox"
+              :checked="isAllSelected"
+              @change="toggleSelectAll"
+            >
+          </th>
+          <th class="px-6 py-3 text-left border-r border-gray-300">
+            ID
+          </th>
+          <th class="px-6 py-3 text-left border-r border-gray-300">
+            Name
+          </th>
+          <th class="px-6 py-3 text-left">
+            Category
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-300">
+        <tr
+          v-for="game in paginatedGames"
+          :key="game.id"
+          :class="{ 'bg-gray-100': game.id % 2 === 0 }"
+          @click="navigateToEditGame(game.id)"
+        >
+          <td class="px-6 py-4 text-center border-r border-gray-300">
+            <input
+              type="checkbox"
+              :checked="isGameSelected(game.id)"
+              @change="toggleGameSelection(game.id)"
+            >
+          </td>
+          <td
+            class="px-6 py-4 border-r border-gray-300 flex items-center"
+          >
+            <span class="mr-1">{{ game.id }}</span>
+            <button
+              class="text-gray-400"
+              @click="$emit('edit', game.id)"
+            >
+              <FontAwesomeIcon
+                :icon="['fas', 'pen']"
+                class="h-4 w-4"
+              />
+            </button>
+          </td>
+          <td class="px-6 py-4 border-r border-gray-300">
+            {{ getGameName(game) }}
+          </td>
+          <td class="px-6 py-4">
+            {{ getCategoryName(game.categoryId) }}
+          </td>
+        </tr>
+        <tr v-if="paginatedGames.length === 0">
+          <td
+            colspan="4"
+            class="px-6 py-4 text-center"
+          >
+            No games found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script setup>
@@ -70,14 +75,36 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 defineProps({
-    paginatedGames: Array,
-    isGameSelected: Function,
-    toggleGameSelection: Function,
-    isAllSelected: Boolean,
-    toggleSelectAll: Function,
-    getGameName: Function,
-    getCategoryName: Function,
+  paginatedGames: {
+    type: Array,
+    default: () => []
+  },
+  isGameSelected: {
+    type: Function,
+    default: () => () => false
+  },
+  toggleGameSelection: {
+    type: Function,
+    default: () => () => {}
+  },
+  isAllSelected: {
+    type: Boolean,
+    default: false
+  },
+  toggleSelectAll: {
+    type: Function,
+    default: () => () => {}
+  },
+  getGameName: {
+    type: Function,
+    default: () => () => "Unknown"
+  },
+  getCategoryName: {
+    type: Function,
+    default: () => () => "Unknown"
+  },
 });
+
 defineEmits(["edit"]);
 
 function navigateToEditGame(gameId) {
