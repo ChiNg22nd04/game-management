@@ -9,12 +9,14 @@ import {
     faSearch,
     faAngleDown,
     faTrash,
+    faAdd,
+    faClose,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Ngăn Font Awesome tự thêm CSS mặc định
 config.autoAddCss = false;
 
-library.add(faPlus, faSearch, faAngleDown, faTrash);
+library.add(faPlus, faSearch, faAngleDown, faTrash, faAdd, faClose);
 
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.component("FontAwesomeIcon", FontAwesomeIcon);
