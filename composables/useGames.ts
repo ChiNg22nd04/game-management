@@ -49,7 +49,7 @@ export function useGames() {
 
     // Category name (lấy từ object `category`)
     const getCategoryName = (game: any): string => {
-        console.log("Game.categoryId:", game.categoryId);
+        console.log("Game", game);
         return game?.category?.name || "Không có danh mục";
     };
 
