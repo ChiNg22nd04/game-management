@@ -47,12 +47,6 @@ export function useGames() {
         );
     };
 
-    // Category name (lấy từ object `category`)
-    const getCategoryName = (game: any): string => {
-        console.log("Game", game);
-        return game?.category?.name || "Không có danh mục";
-    };
-
     // Filtering
     const filteredGames = computed(() => {
         return (games.value || []).filter((game) => {
@@ -180,7 +174,6 @@ export function useGames() {
         paginatedGames,
         totalPages,
         getGameName,
-        getCategoryName,
         isGameSelected,
         toggleGameSelection,
         isAllSelected,
