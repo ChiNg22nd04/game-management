@@ -23,6 +23,7 @@
                 <tr
                     v-for="game in paginatedGames"
                     :key="game.id"
+                    @click="navigateToEditGame(game.id)"
                     :class="{ 'bg-gray-100': game.id % 2 === 0 }"
                 >
                     <td class="px-6 py-4 text-center border-r border-gray-300">
@@ -65,6 +66,9 @@
 
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 defineProps({
     paginatedGames: Array,
     isGameSelected: Function,
@@ -76,5 +80,7 @@ defineProps({
 });
 defineEmits(["edit"]);
 
-console.log("GameTable component loaded");
+function navigateToEditGame(gameId) {
+    router.push(`/games/${gameId}`);
+}
 </script>

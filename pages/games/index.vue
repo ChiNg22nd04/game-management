@@ -9,18 +9,28 @@
                     <label class="block text-sm font-medium mb-1">
                         Category
                     </label>
-                    <select
-                        v-model="selectedCategory"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-sm"
-                    >
-                        <option
-                            v-for="category in categories"
-                            :key="category.id"
-                            :value="category.id"
+                    <div class="relative">
+                        <select
+                            v-model="selectedCategory"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-sm appearance-none pr-8"
                         >
-                            {{ category.name }}
-                        </option>
-                    </select>
+                            <option
+                                v-for="category in categories"
+                                :key="category.id"
+                                :value="category.id"
+                            >
+                                {{ category.name }}
+                            </option>
+                        </select>
+                        <span
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                        >
+                            <Icon
+                                name="angle-down"
+                                class="h-4 w-4 inline-block ml-1"
+                            />
+                        </span>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1"
@@ -38,7 +48,7 @@
                         class="border border-gray-300 hover:bg-gray-100 px-4 py-2 rounded-sm"
                     >
                         <div class="flex items-center">
-                            <Icon name="search" class="h-5 w-5 mr-1" />
+                            <Icon name="search" class="h-4 w-4 mr-1" />
                             Search
                         </div>
                     </button>
@@ -55,14 +65,14 @@
                     @click="confirmDeleteSelected"
                     class="border border-gray-300 hover:bg-gray-100 px-4 py-2 rounded-sm flex items-center"
                 >
-                    <Icon name="trash" class="h-5 w-5 mr-1" />
+                    <Icon name="trash" class="h-4 w-4 mr-1" />
                     Delete Selected
                 </button>
                 <button
                     @click="navigateToRegister"
                     class="border border-gray-300 hover:bg-gray-100 px-4 py-2 rounded-sm flex items-center"
                 >
-                    <Icon name="plus" class="h-5 w-5 mr-1" />
+                    <Icon name="plus" class="h-4 w-4 mr-1" />
                     Register New Game
                 </button>
             </div>
@@ -115,7 +125,6 @@
 </template>
 
 <script setup>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useRouter } from "vue-router";
 import { useGames } from "@/composables/useGames";
 import GameTable from "@/components/GameTable.vue";

@@ -116,7 +116,7 @@
                                                 >Name</label
                                             >
                                             <input
-                                                v-model="gameForm.name"
+                                                v-model="language.nameValue"
                                                 type="text"
                                                 class="w-full px-3 py-2 border border-gray-300 rounded-sm"
                                             />
@@ -235,7 +235,6 @@ import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 import { useCategories } from "@/composables/useCategories";
 import { useGameForm } from "@/composables/useGameForm";
-import GameLanguageForm from "@/components/GameLanguageForm.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -257,18 +256,39 @@ onMounted(async () => {
             const response = await fetch(`/api/games/${gameId}`);
             const result = await response.json();
             if (result.success) {
+                // Chuyển đổi name thành mảng languages chuẩn
+                const languages = (result.data.name || []).map((item) => {
+                    const langObj = item.language;
+                    const code = Object.keys(langObj).find(
+                        (key) => key !== "isDefaut" && key !== "isDefault"
+                    );
+                    return {
+                        code: code,
+                        name:
+                            code === "JA"
+                                ? "Japanese"
+                                : code === "EN"
+                                ? "English"
+                                : code,
+                        isDefault:
+                            langObj.isDefaut || langObj.isDefault || false,
+                        nameValue: langObj[code] || "",
+                    };
+                });
                 gameForm.value = {
                     id: result.data.id,
-                    name: result.data.name,
                     categoryId: result.data.categoryId,
-                    languages: result.data.languages || [
-                        {
-                            code: "en",
-                            name: "English",
-                            isDefault: true,
-                            nameValue: "",
-                        },
-                    ],
+                    languages:
+                        languages.length > 0
+                            ? languages
+                            : [
+                                  {
+                                      code: "EN",
+                                      name: "English",
+                                      isDefault: true,
+                                      nameValue: "",
+                                  },
+                              ],
                 };
             } else {
                 error.value = result.error || "Game not found";

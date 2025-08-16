@@ -49,21 +49,16 @@ export function useGames() {
         }
     };
 
-    // Game name helper
-    const getGameName = (game) => {
-        if (Array.isArray(game.name) && game.name.length > 0) {
-            for (const nameObj of game.name) {
-                if (nameObj.isDefault && nameObj.language) {
-                    const langs = Object.values(nameObj.language);
-                    if (langs.length > 0) return langs[0];
-                }
-            }
-            for (const nameObj of game.name) {
-                if (nameObj.language?.JA) return nameObj.language.JA;
-            }
-            return Object.values(game.name[0].language || {})[0] || "Unknown";
-        }
-        return "Unknown";
+    // Game name
+    const getGameName = (game: any): string => {
+        if (!Array.isArray(game.name) || game.name.length === 0)
+            return "Unknown";
+
+        const defaultLang = game.name.find((n) => n.isDefaut === "true");
+
+        return (
+            defaultLang?.language?.value || game.name[0]?.language?.value || ""
+        );
     };
 
     const getCategoryName = (categoryId) => {
