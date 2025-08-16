@@ -4,4 +4,5 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: ["@nuxtjs/tailwindcss"],
     pages: true,
+    plugins: ["~/plugins/fontawesome.ts"],
 });
