@@ -85,7 +85,9 @@
                         <div
                             class="flex flex-col border-r border-gray-300 w-1/4 bg-gray-50 py-4"
                         >
-                            <div class="px-6 pb-2 font-medium">
+                            <div
+                                class="px-6 pb-4 font-medium border-b border-gray-300"
+                            >
                                 Input by Language
                             </div>
                             <div>
@@ -125,8 +127,10 @@
                             </div>
                         </div>
                         <!-- Language Input & Actions -->
-                        <div class="flex-1 px-6 py-4">
-                            <div class="flex justify-between items-center mb-4">
+                        <div class="flex-1">
+                            <div
+                                class="flex justify-between items-center mb-4 px-4 py-4 border-b border-gray-300"
+                            >
                                 <div class="flex items-center">
                                     <input
                                         type="checkbox"
@@ -175,7 +179,7 @@
                                     Delete language
                                 </button>
                             </div>
-                            <div v-if="selectedLanguage">
+                            <div class="px-4 py-4" v-if="selectedLanguage">
                                 <div class="mb-2">
                                     <label
                                         class="text-sm font-medium text-gray-700"
@@ -185,7 +189,7 @@
                                 <input
                                     v-model="selectedLanguageObj.nameValue"
                                     type="text"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-sm"
+                                    class="px-3 py-2 border border-gray-300 rounded-sm"
                                     placeholder="Enter game name"
                                 />
                             </div>
