@@ -21,6 +21,9 @@ export function useGames() {
         try {
             const res = await fetch("/api/categories");
             const result = await res.json();
+
+            console.log("Categories fetched:", result);
+
             if (result.success) categories.value = result.data;
         } catch (err) {
             console.error(err);
@@ -33,11 +36,14 @@ export function useGames() {
             isLoading.value = true;
             const res = await fetch("/api/games");
             const result = await res.json();
+
+            console.log("Games fetched:", result);
+
             if (result.success) games.value = result.data;
             else error.value = result.error;
         } catch (err) {
             error.value = "Failed to fetch games";
-            console.error(err);
+            console.error("Error fetching games:", err);
         } finally {
             isLoading.value = false;
         }
@@ -83,23 +89,33 @@ export function useGames() {
     const totalPages = computed(() =>
         Math.ceil(filteredGames.value.length / itemsPerPage.value)
     );
+
     const paginatedGames = computed(() => {
         const start = (currentPage.value - 1) * itemsPerPage.value;
-        return filteredGames.value.slice(start, start + itemsPerPage.value);
+        const pageData = filteredGames.value.slice(
+            start,
+            start + itemsPerPage.value
+        );
+        console.log(`Paginated games (page ${currentPage.value}):`, pageData);
+        return pageData;
     });
 
     // Selection logic
     const isGameSelected = (id) => selectedGames.value.includes(id);
+
     const toggleGameSelection = (id) => {
         const idx = selectedGames.value.indexOf(id);
         if (idx === -1) selectedGames.value.push(id);
         else selectedGames.value.splice(idx, 1);
+        console.log("Selected games after toggle:", selectedGames.value);
     };
+
     const isAllSelected = computed(
         () =>
             paginatedGames.value.length > 0 &&
             paginatedGames.value.every((g) => isGameSelected(g.id))
     );
+
     const toggleSelectAll = () => {
         if (isAllSelected.value) {
             paginatedGames.value.forEach((g) =>
@@ -111,28 +127,37 @@ export function useGames() {
                     selectedGames.value.push(g.id);
             });
         }
+        console.log("Selected games after toggle all:", selectedGames.value);
     };
-    const clearSelection = () => (selectedGames.value = []);
+
+    const clearSelection = () => {
+        selectedGames.value = [];
+        console.log("Selection cleared");
+    };
 
     // Delete functions
     const confirmDeleteSelected = () => {
         pendingDeleteIds.value = [...selectedGames.value];
         deleteModalMessage.value = `Bạn có chắc chắn muốn xóa ${selectedGames.value.length} trò chơi đã chọn không?`;
         showDeleteModal.value = true;
+        console.log("Confirm delete for ids:", pendingDeleteIds.value);
     };
     const closeDeleteModal = () => {
         showDeleteModal.value = false;
         pendingDeleteIds.value = [];
+        console.log("Delete modal closed");
     };
     const executeDelete = async () => {
         if (pendingDeleteIds.value.length === 0) return;
         try {
+            console.log("Deleting games with ids:", pendingDeleteIds.value);
             const res = await fetch("/api/games/delete", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ ids: pendingDeleteIds.value }),
             });
             const result = await res.json();
+            console.log("Delete result:", result);
             if (result.success) {
                 games.value = games.value.filter(
                     (g) => !pendingDeleteIds.value.includes(g.id)
@@ -144,7 +169,7 @@ export function useGames() {
                     currentPage.value--;
             } else alert("Failed to delete: " + result.error);
         } catch (err) {
-            console.error(err);
+            console.error("Error deleting games:", err);
             alert("Failed to delete games.");
         } finally {
             closeDeleteModal();
@@ -152,6 +177,7 @@ export function useGames() {
     };
 
     onMounted(async () => {
+        console.log("Component mounted, fetching data...");
         await Promise.all([fetchCategories(), fetchGames()]);
     });
 
