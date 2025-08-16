@@ -112,9 +112,6 @@
                                         class="flex justify-between items-center"
                                     >
                                         <div>
-                                            <label class="block text-sm mb-1"
-                                                >Name</label
-                                            >
                                             <input
                                                 v-model="language.nameValue"
                                                 type="text"
@@ -251,28 +248,29 @@ const { gameForm, isLoading, error, updateGame } = useGameForm();
 onMounted(async () => {
     await fetchCategories();
     if (gameId) {
-        // Fetch game data for edit
         try {
             const response = await fetch(`/api/games/${gameId}`);
             const result = await response.json();
             if (result.success) {
-                // Chuyển đổi name thành mảng languages chuẩn
                 const languages = (result.data.name || []).map((item) => {
-                    const langObj = item.language;
-                    const code = Object.keys(langObj).find(
-                        (key) => key !== "isDefaut" && key !== "isDefault"
-                    );
+                    const lang = item.language;
+                    const code = lang.code;
+                    const value = lang.value || "";
+                    const isDefault =
+                        item.isDefaut === "true" || item.isDefault === true;
+                    let name =
+                        code === "JA"
+                            ? "Japanese"
+                            : code === "EN"
+                            ? "English"
+                            : code === "KO"
+                            ? "Korean"
+                            : code;
                     return {
-                        code: code,
-                        name:
-                            code === "JA"
-                                ? "Japanese"
-                                : code === "EN"
-                                ? "English"
-                                : code,
-                        isDefault:
-                            langObj.isDefaut || langObj.isDefault || false,
-                        nameValue: langObj[code] || "",
+                        code,
+                        name,
+                        isDefault,
+                        nameValue: value,
                     };
                 });
                 gameForm.value = {
