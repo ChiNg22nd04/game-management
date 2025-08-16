@@ -198,49 +198,13 @@
                 </div>
             </div>
 
-            <!-- Add Language Modal -->
-            <div v-if="showLanguageModal" class="border border-gray-300 mb-6">
-                <div
-                    class="flex justify-between items-center border-b border-gray-300 px-6 py-3"
-                >
-                    <h3 class="font-medium">Add Language</h3>
-                    <button
-                        @click="closeLanguageModal"
-                        class="text-gray-500 hover:text-gray-700"
-                    >
-                        ✕
-                    </button>
-                </div>
-                <div class="p-6">
-                    <select
-                        v-model="selectedNewLanguage"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-sm mb-4"
-                    >
-                        <option value="">Select a language</option>
-                        <option
-                            v-for="lang in availableLanguages"
-                            :key="lang.code"
-                            :value="lang.code"
-                        >
-                            {{ lang.name }}
-                        </option>
-                    </select>
-                    <div class="flex justify-center">
-                        <button
-                            @click="addLanguage"
-                            :disabled="!selectedNewLanguage"
-                            :class="[
-                                'border border-gray-300 px-6 py-1 rounded-sm flex items-center',
-                                selectedNewLanguage
-                                    ? 'hover:bg-gray-50'
-                                    : 'opacity-50 cursor-not-allowed',
-                            ]"
-                        >
-                            <span class="mr-1">+</span> Add
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <!-- Add Language Modal as component -->
+            <AddLanguageModal
+                :show="showLanguageModal"
+                :availableLanguages="availableLanguages"
+                @close="closeLanguageModal"
+                @add="handleAddLanguage"
+            />
 
             <!-- Action Buttons -->
             <div class="flex justify-between">
@@ -269,6 +233,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import AddLanguageModal from "@/components/AddLanguageModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import { useCategories } from "@/composables/useCategories";
 import { useGameForm } from "@/composables/useGameForm";
@@ -364,21 +329,14 @@ const closeLanguageModal = () => {
     selectedNewLanguage.value = "";
 };
 
-const addLanguage = () => {
-    if (!selectedNewLanguage.value) return;
-
-    const languageData = LANGUAGES.find(
-        (lang) => lang.code === selectedNewLanguage.value
-    );
+const handleAddLanguage = (languageData) => {
     if (!languageData) return;
-
     gameForm.value.languages.push({
         code: languageData.code,
         name: languageData.name,
         isDefault: false,
         nameValue: "",
     });
-
     closeLanguageModal();
 };
 
