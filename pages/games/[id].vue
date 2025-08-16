@@ -59,7 +59,7 @@
                                 <th class="px-6 py-3 text-left border-r border-gray-300 w-1/4 bg-gray-50">Input by Language</th>
                                 <th class="px-6 py-3 text-left bg-gray-50">
                                     <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
+                                        <div class="flex items-center justify-center flex-1">
                                             <input
                                                 type="checkbox"
                                                 :checked="selectedLanguage && getLanguageByCode(selectedLanguage)?.isDefault"
@@ -73,12 +73,20 @@
                                             @click="deleteSelectedLanguage"
                                             :disabled="!selectedLanguage || getLanguageByCode(selectedLanguage)?.isDefault || gameForm.languages.length <= 1"
                                             :class="[
-                                                'text-gray-600',
+                                                'text-gray-600 flex items-center',
                                                 selectedLanguage && !getLanguageByCode(selectedLanguage)?.isDefault && gameForm.languages.length > 1
                                                     ? 'hover:text-red-600 cursor-pointer'
                                                     : 'opacity-50 cursor-not-allowed',
                                             ]"
                                         >
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                ></path>
+                                            </svg>
                                             Delete language
                                         </button>
                                     </div>
@@ -103,6 +111,7 @@
                                         </div>
                                         <input v-model="language.nameValue" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-sm" placeholder="Enter game name" />
                                     </div>
+                                    <div v-else class="text-gray-400 text-sm italic">Click to edit</div>
                                 </td>
                             </tr>
                             <tr>
