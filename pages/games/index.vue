@@ -117,7 +117,19 @@
         </div>
 
         <!-- Games Table -->
-        <div v-else class="border border-gray-300 overflow-x-auto">
+        <GameTable
+            v-else
+            :games="paginatedGames"
+            :categories="categories"
+            :getGameName="getGameName"
+            :getCategoryName="getCategoryName"
+            :isGameSelected="isGameSelected"
+            :toggleGameSelection="toggleGameSelection"
+            :isAllSelected="isAllSelected"
+            :toggleSelectAll="toggleSelectAll"
+        />
+
+        <!-- <div v-else class="border border-gray-300 overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-300">
                 <thead class="bg-gray-200">
                     <tr>
@@ -197,7 +209,6 @@
                             {{ getCategoryName(game.categoryId) }}
                         </td>
                     </tr>
-                    <!-- Empty state -->
                     <tr v-if="paginatedGames && paginatedGames.length === 0">
                         <td colspan="4" class="px-6 py-4 text-center">
                             No games found
@@ -205,66 +216,24 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </div> -->
 
         <!-- Pagination -->
-        <div class="mt-4 flex justify-center">
-            <div class="flex border border-gray-300">
-                <button
-                    @click="prevPage"
-                    :disabled="currentPage === 1"
-                    class="px-3 py-1 border-r border-gray-300 hover:bg-gray-100"
-                >
-                    «
-                </button>
-                <button
-                    v-for="page in totalPages"
-                    :key="page"
-                    @click="goToPage(page)"
-                    :class="`px-3 py-1 border-r border-gray-300 hover:bg-gray-100 ${
-                        currentPage === page ? 'bg-gray-200' : ''
-                    }`"
-                >
-                    {{ page }}
-                </button>
-                <button
-                    @click="nextPage"
-                    :disabled="currentPage === totalPages"
-                    class="px-3 py-1 hover:bg-gray-100"
-                >
-                    »
-                </button>
-            </div>
-        </div>
+        <Pagination
+            :currentPage="currentPage"
+            :totalPages="totalPages"
+            @prev="prevPage"
+            @next="nextPage"
+            @goto="goToPage"
+        />
 
         <!-- Delete Confirmation Modal -->
-        <div
+        <DeleteModal
             v-if="showDeleteModal"
-            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-        >
-            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">
-                    Xác nhận xóa
-                </h3>
-                <p class="text-gray-600 mb-6">
-                    {{ deleteModalMessage }}
-                </p>
-                <div class="flex justify-end space-x-3">
-                    <button
-                        @click="closeDeleteModal"
-                        class="px-4 py-2 border rounded-md hover:bg-gray-100"
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        @click="executeDelete"
-                        class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                    >
-                        Xóa
-                    </button>
-                </div>
-            </div>
-        </div>
+            :message="deleteModalMessage"
+            @close="closeDeleteModal"
+            @confirm="executeDelete"
+        />
     </div>
 </template>
 

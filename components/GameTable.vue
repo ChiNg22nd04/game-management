@@ -80,4 +80,6 @@ defineProps({
     getCategoryName: Function,
 });
 defineEmits(["edit"]);
+
+console.log("GameTable component loaded");
 </script>
