@@ -12,12 +12,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-300 bg-white">
-                <tr
-                    v-for="game in paginatedGames"
-                    :key="game.id"
-                    :class="{ 'bg-gray-100': game.id % 2 === 0 }"
-                    @click="navigateToEditGame(game.id)"
-                >
+                <tr v-for="game in paginatedGames" :key="game.id" :class="{ 'bg-gray-100': game.id % 2 === 0 }">
                     <td class="border-r border-gray-300 px-6 py-4 text-center">
                         <input
                             type="checkbox"
@@ -25,10 +20,13 @@
                             @change="toggleGameSelection(game.id)"
                         />
                     </td>
-                    <td class="flex items-center border-r border-gray-300 px-6 py-4">
+                    <td
+                        class="flex items-center border-r border-gray-300 px-6 py-4"
+                        @click="navigateToEditGame(game.id)"
+                    >
                         <span class="mr-1">{{ game.id }}</span>
                         <button class="text-gray-400" @click="$emit('edit', game.id)">
-                            <FontAwesomeIcon :icon="['fas', 'pen']" class="h-4 w-4" />
+                            <Icon icon="arrow-up-right-from-square" class="ml-2 h-4 w-4" />
                         </button>
                     </td>
                     <td class="border-r border-gray-300 px-6 py-4">
