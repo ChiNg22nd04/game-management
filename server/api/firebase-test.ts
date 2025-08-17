@@ -1,14 +1,14 @@
-import { db } from "../utils/firebase-admin";
-import { defineEventHandler } from "h3";
+import { db } from '../utils/firebase-admin';
+import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
     try {
-        const testCollection = db.collection("test");
-        const testDoc = await testCollection.doc("connection-test").get();
+        const testCollection = db.collection('test');
+        const testDoc = await testCollection.doc('connection-test').get();
 
         return {
             success: true,
-            message: "Firebase connection successful",
+            message: 'Firebase connection successful',
             exists: testDoc.exists,
             timestamp: new Date().toISOString(),
         };
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
         // If there's an error, return it
         return {
             success: false,
-            message: "Firebase connection failed",
+            message: 'Firebase connection failed',
             error: error instanceof Error ? error.message : String(error),
         };
     }

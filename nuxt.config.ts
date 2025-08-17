@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
-    compatibilityDate: "2025-07-15",
+    compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
-    modules: ["@nuxtjs/tailwindcss"],
+    modules: ['@nuxtjs/tailwindcss'],
     pages: true,
-    plugins: ["~/plugins/fontawesome.ts"],
+    plugins: ['~/plugins/fontawesome.ts'],
 });

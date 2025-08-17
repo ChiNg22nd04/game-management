@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref } from 'vue';
 
 export function useCategories() {
     const categories = ref([]);
@@ -7,7 +7,7 @@ export function useCategories() {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch("/api/categories");
+            const response = await fetch('/api/categories');
             const result = await response.json();
             if (result.success) {
                 categories.value = result.data;
@@ -15,7 +15,7 @@ export function useCategories() {
                 error.value = result.error;
             }
         } catch (_err) {
-            error.value = "Failed to fetch categories";
+            error.value = 'Failed to fetch categories';
         } finally {
             isLoading.value = false;
         }

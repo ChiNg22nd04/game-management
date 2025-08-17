@@ -1,6 +1,6 @@
 // server/utils/firebase-admin.ts
-import admin, { ServiceAccount } from "firebase-admin";
-import serviceAccount from "../secrets/firebase-service-account.json";
+import admin, { ServiceAccount } from 'firebase-admin';
+import serviceAccount from '../secrets/firebase-service-account.json';
 
 const serviceAccountTyped = serviceAccount as ServiceAccount;
 
