@@ -21,16 +21,6 @@ export function useGameForm(initialData = null) {
     const error = ref<string | null>(null);
 
     async function updateGame() {
-        // Validate trước khi gửi
-        if (!gameForm.value.name.some((n) => n.isDefault)) {
-            error.value = 'Please select a default language';
-            return;
-        }
-        if (gameForm.value.name.some((n) => !n.language.nameValue)) {
-            error.value = 'All languages must have a name';
-            return;
-        }
-
         isLoading.value = true;
         try {
             const response = await fetch('/api/games/update', {
