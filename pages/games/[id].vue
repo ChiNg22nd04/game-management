@@ -204,7 +204,7 @@ const gameId = route.params.id;
 
 // Composables
 const { categories, fetchCategories } = useCategories();
-const { gameForm, isLoading, error, updateGame } = useGameForm();
+const { gameForm, isLoading, error } = useGameForm();
 
 // Language management state
 const selectedLanguage = ref('');
@@ -319,6 +319,36 @@ const loadGame = async (id) => {
 };
 
 const cancel = () => router.push('/games');
+// Override updateGame to format payload before sending
+const updateGame = async () => {
+    const payload = {
+        id: gameForm.value.id,
+        categoryId: gameForm.value.categoryId,
+        name: gameForm.value.languages.map((lang) => ({
+            language: {
+                code: lang.code,
+                value: lang.nameValue || '',
+            },
+            isDefault: lang.isDefault,
+        })),
+    };
+    isLoading.value = true;
+    try {
+        const response = await fetch('/api/games/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!result.success) {
+            error.value = result.error || 'Failed to update game';
+        }
+    } catch (_err) {
+        error.value = 'Error updating game';
+    } finally {
+        isLoading.value = false;
+    }
+};
 
 onMounted(async () => {
     if (gameId) {
