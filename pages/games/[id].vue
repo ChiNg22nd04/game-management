@@ -320,7 +320,6 @@ const loadGame = async (id) => {
 const cancel = () => router.push('/games');
 
 onMounted(async () => {
-    await fetchCategories();
     if (gameId) {
         await loadGame(gameId);
     } else {
