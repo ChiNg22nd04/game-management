@@ -152,8 +152,8 @@
 
             <!-- Add Language Modal as component -->
             <AddLanguageModal
-                :show="showLanguageModal"
                 :available-languages="availableLanguages"
+                :show="showLanguageModal"
                 @close="closeLanguageModal"
                 @add="handleAddLanguage"
             />
@@ -184,9 +184,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import AddLanguageModal from '@/components/AddLanguageModal.vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useCategories } from '@/composables/useCategories';
 import { useGameForm } from '@/composables/useGameForm';
 import { LANGUAGES } from '@/composables/languages';
@@ -198,11 +198,9 @@ defineOptions({
 });
 
 const router = useRouter();
-const route = useRoute();
-const gameId = route.params.id;
 
 // Composables
-const { categories, fetchCategories } = useCategories();
+const { categories } = useCategories();
 const { gameForm, isLoading, error, updateGame } = useGameForm();
 
 // Language management state
@@ -224,43 +222,20 @@ const getLanguageByCode = (code) => {
     return gameForm.value.languages?.find((lang) => lang.code === code);
 };
 
-// Add computed property for selected language object
+// Computed để bind v-model cho input name
 const selectedLanguageObj = computed({
     get() {
-        return getLanguageByCode(selectedLanguage.value);
+        const lang = getLanguageByCode(selectedLanguage.value);
+        return lang ? lang.language : null;
     },
     set(val) {
-        if (selectedLanguage.value && val && typeof val.nameValue !== 'undefined') {
-            const lang = getLanguageByCode(selectedLanguage.value);
-            if (lang) lang.nameValue = val.nameValue;
+        const lang = getLanguageByCode(selectedLanguage.value);
+
+        if (lang && val && typeof val.value !== 'undefined') {
+            lang.language.value = val.value;
         }
     },
 });
-
-const toggleDefaultLanguage = () => {
-    if (!selectedLanguage.value) return;
-
-    const language = getLanguageByCode(selectedLanguage.value);
-    if (!language) return;
-
-    // Remove default from all languages
-    gameForm.value.languages.forEach((lang) => {
-        lang.isDefault = false;
-    });
-
-    // Set selected language as default
-    language.isDefault = true;
-};
-
-const deleteSelectedLanguage = () => {
-    if (!selectedLanguage.value) return;
-
-    const language = getLanguageByCode(selectedLanguage.value);
-    if (!language || language.isDefault || gameForm.value.languages.length <= 1) return;
-
-    gameForm.value.languages = gameForm.value.languages.filter((lang) => lang.code !== selectedLanguage.value);
-    selectedLanguage.value = '';
-};
 
 const openLanguageModal = () => {
     showLanguageModal.value = true;
@@ -274,59 +249,16 @@ const closeLanguageModal = () => {
 
 const handleAddLanguage = (languageData) => {
     if (!languageData) return;
+    console.log('Adding language:', languageData);
+
     gameForm.value.languages.push({
-        code: languageData.code,
-        name: languageData.name,
-        isDefault: false,
-        nameValue: '',
+        language: {
+            code: languageData.code,
+            value: '',
+        },
     });
     closeLanguageModal();
 };
 
-const loadGame = async (id) => {
-    try {
-        const res = await $fetch(`/api/games/${id}`);
-        if (!res.success) {
-            error.value = res.error || 'Game not found';
-            return;
-        }
-
-        const languages = (res.data.name || []).map((item) => {
-            const lang = item.language;
-            const found = LANGUAGES.find((l) => l.code === lang.code);
-            return {
-                code: lang.code,
-                name: found?.name || lang.code,
-                isDefault: item.isDefaut === 'true' || item.isDefault === true,
-                nameValue: lang.value || '',
-            };
-        });
-
-        gameForm.value = {
-            id: res.data.id,
-            categoryId: res.data.categoryId,
-            languages: languages.length ? languages : [{ ...LANGUAGES[0], isDefault: true, nameValue: '' }],
-        };
-
-        // Auto-select first language
-        if (gameForm.value.languages?.length > 0) {
-            selectedLanguage.value = gameForm.value.languages[0].code;
-        }
-    } catch {
-        error.value = 'Error loading game data';
-    }
-};
-
 const cancel = () => router.push('/games');
-
-onMounted(async () => {
-    if (gameId) {
-        await loadGame(gameId);
-    } else {
-        // For new games, auto-select first language
-        if (gameForm.value.languages?.length > 0) {
-            selectedLanguage.value = gameForm.value.languages[0].code;
-        }
-    }
-});
 </script>

@@ -5,18 +5,32 @@ export function useGameForm(initialData = null) {
         initialData || {
             id: '',
             categoryId: '',
-            name: '',
-            // languages: [{ code: 'EN', name: 'English', value: '' }],
-            isDefault: true,
+            name: [
+                {
+                    language: {
+                        code: 'EN',
+                        value: '',
+                    },
+                    isDefault: true,
+                },
+            ],
         },
     );
-
-    console.log('Game form initialized:', gameForm.value);
 
     const isLoading = ref(false);
     const error = ref<string | null>(null);
 
     async function updateGame() {
+        // Validate trước khi gửi
+        if (!gameForm.value.name.some((n) => n.isDefault)) {
+            error.value = 'Please select a default language';
+            return;
+        }
+        if (gameForm.value.name.some((n) => !n.language.nameValue)) {
+            error.value = 'All languages must have a name';
+            return;
+        }
+
         isLoading.value = true;
         try {
             const response = await fetch('/api/games/update', {
