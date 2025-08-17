@@ -17,6 +17,8 @@ export function useGameForm(initialData = null) {
         },
     );
 
+    console.log('Game form initialized:', gameForm.value);
+
     const isLoading = ref(false);
     const error = ref<string | null>(null);
 

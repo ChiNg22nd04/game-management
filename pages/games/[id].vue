@@ -167,7 +167,7 @@
                         class="rounded-sm border border-gray-300 px-4 py-2 hover:bg-gray-100"
                         @click="cancel"
                     >
-                        Return To List Page
+                        Return To Game List
                     </button>
                 </div>
                 <div>
@@ -176,7 +176,7 @@
                         class="rounded-sm border border-gray-300 px-4 py-2 hover:bg-gray-100"
                         @click="updateGame"
                     >
-                        Register / Edit
+                        Save
                     </button>
                 </div>
             </div>

@@ -54,7 +54,6 @@
                                         v-model="gameForm.id"
                                         type="text"
                                         class="w-full rounded-sm border border-gray-300 px-3 py-2"
-                                        :disabled="true"
                                     />
                                 </td>
                             </tr>
@@ -75,19 +74,19 @@
                             <div class="border-b border-gray-300 px-6 pb-4 font-medium">Input by Language</div>
                             <div>
                                 <div
-                                    v-for="language in gameForm.languages"
-                                    :key="language.code"
+                                    v-for="item in gameForm.name"
+                                    :key="item.language.code"
                                     :class="[
                                         'cursor-pointer px-6 py-2',
-                                        selectedLanguage === language.code
+                                        selectedLanguage === item.language.code
                                             ? 'flex items-center font-bold text-black'
                                             : 'text-gray-700',
                                         'hover:bg-gray-100',
                                     ]"
-                                    @click="selectLanguage(language.code)"
+                                    @click="selectLanguage(item.language.code)"
                                 >
                                     <span>
-                                        {{ language.name }}
+                                        {{ item.language.code }}
                                     </span>
                                 </div>
                             </div>
@@ -118,13 +117,13 @@
                                     :disabled="
                                         !selectedLanguage ||
                                         getLanguageByCode(selectedLanguage)?.isDefault ||
-                                        gameForm.languages.length <= 1
+                                        gameForm.name.length <= 1
                                     "
                                     :class="[
                                         'flex items-center border-l border-gray-300 px-4 py-4 text-gray-600',
                                         selectedLanguage &&
                                         !getLanguageByCode(selectedLanguage)?.isDefault &&
-                                        gameForm.languages.length > 1
+                                        gameForm.name.length > 1
                                             ? 'cursor-pointer hover:text-red-600'
                                             : 'cursor-not-allowed opacity-50',
                                     ]"
@@ -139,7 +138,7 @@
                                     <label class="text-sm font-medium text-gray-700">Name</label>
                                 </div>
                                 <input
-                                    v-model="selectedLanguageObj.nameValue"
+                                    v-model="selectedLanguageObj.value"
                                     type="text"
                                     class="rounded-sm border border-gray-300 px-3 py-2"
                                     placeholder="Enter game name"
@@ -166,7 +165,7 @@
                         class="rounded-sm border border-gray-300 px-4 py-2 hover:bg-gray-100"
                         @click="cancel"
                     >
-                        Return To List Page
+                        Return To Game List
                     </button>
                 </div>
                 <div>
@@ -175,7 +174,7 @@
                         class="rounded-sm border border-gray-300 px-4 py-2 hover:bg-gray-100"
                         @click="updateGame"
                     >
-                        Register / Edit
+                        Register
                     </button>
                 </div>
             </div>
@@ -210,7 +209,7 @@ const selectedNewLanguage = ref('');
 
 // Computed properties
 const availableLanguages = computed(() => {
-    return LANGUAGES.filter((lang) => !gameForm.value.languages?.some((gl) => gl.code === lang.code));
+    return LANGUAGES.filter((lang) => !gameForm.value.name?.some((item) => item.language.code === lang.code));
 });
 
 // Language management functions
@@ -219,20 +218,19 @@ const selectLanguage = (code) => {
 };
 
 const getLanguageByCode = (code) => {
-    return gameForm.value.languages?.find((lang) => lang.code === code);
+    return gameForm.value.name?.find((item) => item.language.code === code);
 };
 
 // Computed để bind v-model cho input name
 const selectedLanguageObj = computed({
     get() {
-        const lang = getLanguageByCode(selectedLanguage.value);
-        return lang ? lang.language : null;
+        const item = getLanguageByCode(selectedLanguage.value);
+        return item ? item.language : null;
     },
     set(val) {
-        const lang = getLanguageByCode(selectedLanguage.value);
-
-        if (lang && val && typeof val.value !== 'undefined') {
-            lang.language.value = val.value;
+        const item = getLanguageByCode(selectedLanguage.value);
+        if (item && val && typeof val.value !== 'undefined') {
+            item.language.value = val.value;
         }
     },
 });
@@ -250,12 +248,12 @@ const closeLanguageModal = () => {
 const handleAddLanguage = (languageData) => {
     if (!languageData) return;
     console.log('Adding language:', languageData);
-
-    gameForm.value.languages.push({
+    gameForm.value.name.push({
         language: {
             code: languageData.code,
             value: '',
         },
+        isDefault: false,
     });
     closeLanguageModal();
 };
