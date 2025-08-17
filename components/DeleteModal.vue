@@ -1,5 +1,5 @@
 <template>
-    <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
             <h3 class="mb-4 text-lg font-medium text-gray-900">Xác nhận xóa</h3>
             <p class="mb-6 text-gray-600">
@@ -17,7 +17,6 @@
 
 <script setup>
 defineProps({
-    show: Boolean,
     message: {
         type: String,
         default: '',

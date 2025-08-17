@@ -69,7 +69,7 @@
         <DeleteModal
             v-if="showDeleteModal"
             :message="deleteModalMessage"
-            @close="closeDeleteModal"
+            @cancel="closeDeleteModal"
             @confirm="executeDelete"
         />
     </div>

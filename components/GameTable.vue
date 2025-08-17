@@ -13,9 +13,13 @@
             </thead>
             <tbody class="divide-y divide-gray-300 bg-white">
                 <tr v-for="game in paginatedGames" :key="game.id" :class="{ 'bg-gray-100': game.id % 2 === 0 }">
+                    {{
+                        game
+                    }}
                     <td class="border-r border-gray-300 px-6 py-4 text-center">
                         <input
                             type="checkbox"
+                            :value="game.id"
                             :checked="isGameSelected(game.id)"
                             @change="toggleGameSelection(game.id)"
                         />
@@ -45,7 +49,6 @@
 </template>
 
 <script setup>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 

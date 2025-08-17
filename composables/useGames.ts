@@ -73,15 +73,19 @@ export function useGames() {
         return pageData;
     });
 
-    // Selection logic
-    const isGameSelected = (id: string) => selectedGames.value.includes(id);
+    const isGameSelected = (id: string) => {
+        console.log('Checking if game is selected for id:', id, 'Current selected:', selectedGames.value);
+        return selectedGames.value.includes(id);
+    };
 
     const toggleGameSelection = (id: string) => {
+        console.log('Toggling game with id:', id);
         if (isGameSelected(id)) {
             selectedGames.value = selectedGames.value.filter((gid) => gid !== id);
         } else {
             selectedGames.value.push(id);
         }
+        console.log('Now selected:', selectedGames.value);
     };
 
     const isAllSelected = computed(
