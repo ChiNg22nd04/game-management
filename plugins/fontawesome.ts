@@ -8,6 +8,7 @@ import {
     faPlus,
     faSearch,
     faAngleDown,
+    faAngleRight,
     faTrash,
     faAdd,
     faClose,
@@ -17,7 +18,7 @@ import {
 // Ngăn Font Awesome tự thêm CSS mặc định
 config.autoAddCss = false;
 
-library.add(faPlus, faSearch, faAngleDown, faTrash, faAdd, faClose, faArrowUpRightFromSquare);
+library.add(faPlus, faSearch, faAngleDown, faTrash, faAdd, faClose, faArrowUpRightFromSquare, faAngleRight);
 
 export default defineNuxtPlugin((nuxtApp: any) => {
     nuxtApp.vueApp.component('FontAwesomeIcon', FontAwesomeIcon);

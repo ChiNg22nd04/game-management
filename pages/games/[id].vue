@@ -88,8 +88,13 @@
                                 >
                                     <span>
                                         {{ language.name }}
-                                        <span v-if="selectedLanguage === language.code">&nbsp;&gt;</span>
                                     </span>
+                                    <Icon
+                                        icon="fa-angle-right"
+                                        v-if="selectedLanguage === language.code"
+                                        name="angle-right"
+                                        class="ml-2 h-4 w-4 text-black"
+                                    />
                                 </div>
                             </div>
                             <div class="px-6 pt-4">
