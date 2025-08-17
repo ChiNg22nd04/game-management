@@ -38,9 +38,10 @@ export function useGames() {
     };
 
     const getGameName = (game: any): string => {
-        console.log('Getting game name for:', game);
+        console.log('Getting game name for:', game.name);
         if (!Array.isArray(game.name) || game.name.length === 0) return '';
-        const defaultLang = game.name.find((n: any) => n.isDefaut === 'true');
+        const defaultLang = game.name.find((n: any) => n.isDefault === 'true' || n.isDefault === true);
+        console.log('Default language found:', defaultLang);
         return defaultLang?.language?.value || game.name[0]?.language?.value || '';
     };
 

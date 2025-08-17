@@ -298,7 +298,7 @@ const loadGame = async (id) => {
             return {
                 code: lang.code,
                 name: found?.name || lang.code,
-                isDefault: item.isDefaut === 'true' || item.isDefault === true,
+                isDefault: item.isDefault === 'true' || item.isDefault === true,
                 nameValue: lang.value || '',
             };
         });
