@@ -41,5 +41,24 @@ export function useGameForm(initialData = null) {
         }
     }
 
-    return { gameForm, isLoading, error, updateGame };
+    async function createGame() {
+        isLoading.value = true;
+        try {
+            const response = await fetch('/api/games/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(gameForm.value),
+            });
+            const result = await response.json();
+            if (!result.success) {
+                error.value = result.error || 'Failed to create game';
+            }
+        } catch (_err) {
+            error.value = 'Error creating game';
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    return { gameForm, isLoading, error, updateGame, createGame };
 }

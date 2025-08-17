@@ -178,7 +178,7 @@
                     <button
                         type="button"
                         class="rounded-sm border border-gray-300 px-4 py-2 hover:bg-gray-100"
-                        @click="updateGame"
+                        @click="createGame"
                     >
                         Register
                     </button>
@@ -206,7 +206,7 @@ const router = useRouter();
 
 // Composables
 const { categories } = useCategories();
-const { gameForm, isLoading, error, updateGame } = useGameForm();
+const { gameForm, isLoading, error, createGame } = useGameForm();
 
 // Language management state
 const selectedLanguage = ref('');

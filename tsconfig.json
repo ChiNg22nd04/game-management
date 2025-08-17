@@ -11,9 +11,6 @@
     "include": [
         "test.ts",
         "server/**/*.ts",
-        "server/api/games/update.ts",
-        "server/api/games/delete.ts.d",
-        "server/api/games/create.ts.doc",
         "nuxt.config.ts",
         "vite.config.ts",
         "**/*.vue",
