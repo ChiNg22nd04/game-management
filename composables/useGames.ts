@@ -38,6 +38,7 @@ export function useGames() {
     };
 
     const getGameName = (game: any): string => {
+        console.log("Getting game name for:", game);
         if (!Array.isArray(game.name) || game.name.length === 0) return "";
         const defaultLang = game.name.find((n: any) => n.isDefaut === "true");
         return (
@@ -45,6 +46,10 @@ export function useGames() {
             game.name[0]?.language?.value ||
             ""
         );
+    };
+
+    const getCategoryName = (game: any): string => {
+        return game?.category?.name || "Không có danh mục";
     };
 
     // Filtering
@@ -174,6 +179,7 @@ export function useGames() {
         paginatedGames,
         totalPages,
         getGameName,
+        getCategoryName,
         isGameSelected,
         toggleGameSelection,
         isAllSelected,

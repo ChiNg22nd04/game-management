@@ -163,6 +163,7 @@ const {
     paginatedGames,
     totalPages,
     getGameName,
+    getCategoryName,
     isGameSelected,
     toggleGameSelection,
     isAllSelected,

@@ -53,7 +53,7 @@
             {{ getGameName(game) }}
           </td>
           <td class="px-6 py-4">
-            {{ getCategoryName(game.categoryId) }}
+            {{ getCategoryName(game) }}
           </td>
         </tr>
         <tr v-if="paginatedGames.length === 0">
