@@ -110,7 +110,7 @@ export function useGames() {
     // Delete functions
     const confirmDeleteSelected = () => {
         pendingDeleteIds.value = [...selectedGames.value];
-        deleteModalMessage.value = `Bạn có chắc chắn muốn xóa ${selectedGames.value.length} trò chơi đã chọn không?`;
+        deleteModalMessage.value = `Are you sure you want to delete the selected ${selectedGames.value.length}?`;
         showDeleteModal.value = true;
         console.log('Confirm delete for ids:', pendingDeleteIds.value);
     };
@@ -136,13 +136,15 @@ export function useGames() {
                 games.value = games.value.filter((g) => !pendingDeleteIds.value.includes(g.id));
                 selectedGames.value = selectedGames.value.filter((id) => !pendingDeleteIds.value.includes(id));
                 if (paginatedGames.value.length === 0 && currentPage.value > 1) currentPage.value--;
-            } else alert('Failed to delete: ' + result.error);
+            } else {
+                console.error('Delete failed:', result.error);
+            }
         } catch (err) {
             console.error('Error deleting games:', err);
-            alert('Failed to delete games.');
         } finally {
             closeDeleteModal();
         }
+        await fetchGames();
     };
 
     onMounted(async () => {

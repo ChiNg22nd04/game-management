@@ -3,14 +3,21 @@ import { defineEventHandler, readBody } from 'h3';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
-    const gameId = body.id;
+    const ids = body.ids;
+    console.log('Received request to delete game with ID:', ids);
 
-    if (!gameId) {
+    if (!ids) {
         return { status: 400, body: { error: 'Game ID is required' } };
     }
 
     try {
-        await db.collection('games').doc(gameId).delete();
+        const batch = db.batch();
+        ids.forEach((id: string) => {
+            const docRef = db.collection('games').doc(id);
+            console.log('Preparing to delete game with ID:', id, docRef);
+            batch.delete(docRef);
+        });
+        await batch.commit();
         return { status: 200, body: { message: 'Game deleted successfully' } };
     } catch (error) {
         console.error('Error deleting game:', error);
