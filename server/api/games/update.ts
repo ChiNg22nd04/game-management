@@ -5,7 +5,8 @@ import { defineEventHandler, readBody } from 'h3';
 export default defineEventHandler(async (event) => {
     try {
         const body = await readBody(event);
-        const { id, ...gameData } = body;
+        const { id, languages, ...data } = body;
+        console.log('Updating game with data:', id, languages, data);
 
         if (!id) {
             return {
@@ -14,7 +15,14 @@ export default defineEventHandler(async (event) => {
             };
         }
 
-        await db.collection('games').doc(id).set(gameData, { merge: true });
+        if (languages) {
+            data.name = languages.map((lang: any) => ({
+                language: { code: lang.code, value: lang.nameValue || '' },
+                isDefault: lang.isDefault || false,
+            }));
+        }
+
+        await db.collection('games').doc(id).set(data, { merge: true });
 
         return {
             success: true,
