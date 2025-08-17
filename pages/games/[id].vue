@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto px-4 py-8">
-        <h1 class="mb-6 text-2xl font-bold">Game Register / Edit</h1>
+        <h1 class="mb-6 text-2xl font-bold">Game Edit</h1>
 
         <div v-if="isLoading" class="my-12 flex justify-center">
             <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500" />
