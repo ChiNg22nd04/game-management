@@ -86,7 +86,7 @@
                                     @click="selectLanguage(item.language.code)"
                                 >
                                     <span>
-                                        {{ item.language.code }}
+                                        {{ getLanguageName(item.language.code) }}
                                     </span>
                                     <Icon
                                         icon="fa-angle-right"
@@ -221,6 +221,11 @@ const availableLanguages = computed(() => {
 // Language management functions
 const selectLanguage = (code) => {
     selectedLanguage.value = code;
+};
+
+const getLanguageName = (code) => {
+    const lang = LANGUAGES.find((l) => l.code === code);
+    return lang ? lang.name : code;
 };
 
 const getLanguageByCode = (code) => {
