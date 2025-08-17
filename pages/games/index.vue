@@ -2,6 +2,16 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="mb-6 text-2xl font-bold">Game Management</h1>
 
+        <!-- Search and Filter Section -->
+        <SearchFilter
+            :categories="categories"
+            :search-query="searchQuery"
+            :selected-category="selectedCategory"
+            @update:search-query="updateSearchQuery"
+            @update:selected-category="updateSelectedCategory"
+            @search="applyFilters"
+        />
+
         <!-- Game List Header -->
         <div class="mb-3 flex items-center justify-between">
             <h2 class="text-lg font-medium">Game List</h2>
@@ -26,7 +36,7 @@
 
         <!-- Loading State -->
         <div v-if="isLoading" class="my-12 flex justify-center">
-            <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500" />
+            <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
         </div>
 
         <!-- Error State -->
@@ -68,10 +78,12 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useGames } from '@/composables/useGames';
+import { useCategories } from '@/composables/useCategories';
 import GameTable from '@/components/GameTable.vue';
 import Pagination from '@/components/Pagination.vue';
 import DeleteModal from '@/components/DeleteModal.vue';
 import Icon from '@/components/Icon.vue';
+import SearchFilter from '@/components/SearchFilter.vue';
 
 // Component name for ESLint
 defineOptions({
@@ -80,7 +92,6 @@ defineOptions({
 
 const router = useRouter();
 const {
-    categories,
     isLoading,
     error,
     searchQuery,
@@ -102,6 +113,8 @@ const {
     executeDelete,
 } = useGames();
 
+const { categories } = useCategories();
+
 function navigateToRegister() {
     router.push('/register');
 }
@@ -116,5 +129,13 @@ function nextPage() {
 }
 function goToPage(page) {
     currentPage.value = page;
+}
+
+function updateSearchQuery(query) {
+    searchQuery.value = query;
+}
+
+function updateSelectedCategory(category) {
+    selectedCategory.value = category;
 }
 </script>
