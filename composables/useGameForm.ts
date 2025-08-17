@@ -6,9 +6,13 @@ export function useGameForm(initialData = null) {
             id: '',
             categoryId: '',
             name: '',
-            languages: [{ code: 'en', name: 'English', isDefault: true, nameValue: '' }],
+            // languages: [{ code: 'EN', name: 'English', value: '' }],
+            isDefault: true,
         },
     );
+
+    console.log('Game form initialized:', gameForm.value);
+
     const isLoading = ref(false);
     const error = ref<string | null>(null);
 

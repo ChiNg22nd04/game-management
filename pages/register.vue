@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto px-4 py-8">
-        <h1 class="mb-6 text-2xl font-bold">Game Register / Edit</h1>
+        <h1 class="mb-6 text-2xl font-bold">Game Register</h1>
 
         <div v-if="isLoading" class="my-12 flex justify-center">
             <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500" />
@@ -88,7 +88,6 @@
                                 >
                                     <span>
                                         {{ language.name }}
-                                        <span v-if="selectedLanguage === language.code">&nbsp;&gt;</span>
                                     </span>
                                 </div>
                             </div>
@@ -195,7 +194,7 @@ import Icon from '@/components/Icon.vue';
 
 // Component name for ESLint
 defineOptions({
-    name: 'GameDetail',
+    name: 'RegisterGame',
 });
 
 const router = useRouter();
