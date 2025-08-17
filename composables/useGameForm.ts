@@ -4,12 +4,13 @@ export function useGameForm(initialData = null) {
     const gameForm = ref(
         initialData || {
             id: '',
+            categoryId: '',
             name: '',
             languages: [{ code: 'en', name: 'English', isDefault: true, nameValue: '' }],
         },
     );
     const isLoading = ref(false);
-    const error = ref(null);
+    const error = ref<string | null>(null);
 
     async function updateGame() {
         isLoading.value = true;
