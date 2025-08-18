@@ -4,7 +4,6 @@ import * as gameServices from '@/services/gameServices';
 export function useGameForm(initialData = null) {
     const gameForm = ref(
         initialData || {
-            id: '',
             categoryId: '',
             name: [
                 {
