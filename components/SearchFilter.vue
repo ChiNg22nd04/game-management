@@ -28,7 +28,7 @@
                 />
             </div>
             <div class="flex items-end">
-                <button class="rounded-sm border border-gray-300 px-4 py-2 hover:bg-gray-100" @click="applyFilters">
+                <button class="rounded-sm border border-gray-300 px-4 py-2 hover:bg-gray-100" @click="$emit('search')">
                     <div class="flex items-center">
                         <Icon name="search" class="mr-1 h-4 w-4" />
                         Search

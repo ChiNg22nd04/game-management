@@ -9,7 +9,7 @@
             :selected-category="selectedCategory"
             @update:search-query="updateSearchQuery"
             @update:selected-category="updateSelectedCategory"
-            @search="applyFilters"
+            @search="filteredGames"
         />
 
         <!-- Game List Header -->
@@ -47,7 +47,7 @@
         <!-- Games Table -->
         <GameTable
             v-else
-            :paginated-games="paginatedGames"
+            :paginated-games="displayedGames"
             :get-game-name="getGameName"
             :get-category-name="getCategoryName"
             :is-game-selected="isGameSelected"
@@ -95,6 +95,8 @@ const {
     isLoading,
     error,
     searchQuery,
+    filteredGames,
+    displayedGames,
     selectedCategory,
     currentPage,
     selectedGames,
@@ -118,9 +120,10 @@ const { categories } = useCategories();
 function navigateToRegister() {
     router.push('/register');
 }
-function applyFilters() {
-    currentPage.value = 1;
-}
+// function applyFilters() {
+//     currentPage.value = 1;
+// }
+
 function prevPage() {
     if (currentPage.value > 1) currentPage.value--;
 }

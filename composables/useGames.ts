@@ -11,6 +11,8 @@ export function useGames() {
     const itemsPerPage = ref(5);
     const selectedGames = ref<string[]>([]);
 
+    const displayedGames = ref<any[]>([]);
+
     const showDeleteModal = ref(false);
     const deleteModalMessage = ref('');
     const pendingDeleteIds = ref<string[]>([]);
@@ -34,6 +36,7 @@ export function useGames() {
             console.error('Error fetching games:', err);
         } finally {
             isLoading.value = false;
+            filteredGames();
         }
     };
 
@@ -50,23 +53,32 @@ export function useGames() {
     };
 
     // Filtering
-    const filteredGames = computed(() => {
-        return (games.value || []).filter((game) => {
-            const name = getGameName(game);
-            const matchesSearch = name.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const filteredGames = () => {
+        console.log('Filtering games');
+        if (!games.value || games.value.length === 0) {
+            displayedGames.value = [];
+            return;
+        }
 
+        displayedGames.value = games.value.filter((game) => {
+            const gameName = getGameName(game).toLowerCase();
+            const searchText = searchQuery.value.toLowerCase();
+
+            const matchesSearch = gameName.includes(searchText);
             const matchesCategory = !selectedCategory.value || game.categoryId === selectedCategory.value;
+
+            console.log(matchesSearch && matchesCategory);
 
             return matchesSearch && matchesCategory;
         });
-    });
+    };
 
     // Pagination
-    const totalPages = computed(() => Math.ceil(filteredGames.value.length / itemsPerPage.value));
+    const totalPages = computed(() => Math.ceil(displayedGames.value.length / itemsPerPage.value));
 
     const paginatedGames = computed(() => {
         const start = (currentPage.value - 1) * itemsPerPage.value;
-        const pageData = filteredGames.value.slice(start, start + itemsPerPage.value);
+        const pageData = displayedGames.value.slice(start, start + itemsPerPage.value);
 
         console.log(`Paginated games (page ${currentPage.value}):`, pageData);
 
@@ -157,6 +169,8 @@ export function useGames() {
         isLoading,
         error,
         searchQuery,
+        filteredGames,
+        displayedGames,
         selectedCategory,
         currentPage,
         itemsPerPage,
