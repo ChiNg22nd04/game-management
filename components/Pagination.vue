@@ -6,7 +6,7 @@
                 class="border-r border-gray-300 px-3 py-1 hover:bg-gray-100"
                 @click="$emit('prev')"
             >
-                «
+                <Icon name="angles-left" class="h-4 w-4" />
             </button>
             <button
                 v-for="page in totalPages"
@@ -19,13 +19,15 @@
                 {{ page }}
             </button>
             <button :disabled="currentPage === totalPages" class="px-3 py-1 hover:bg-gray-100" @click="$emit('next')">
-                »
+                <Icon name="angles-right" class="h-4 w-4" />
             </button>
         </div>
     </div>
 </template>
 
 <script setup>
+import Icon from './Icon.vue';
+
 // Component name for ESLint
 defineOptions({
     name: 'PaginationComponent',
