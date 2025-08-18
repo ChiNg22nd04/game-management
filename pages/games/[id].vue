@@ -195,7 +195,8 @@ import AddLanguageModal from '@/components/AddLanguageModal.vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useCategories } from '@/composables/useCategories';
 import { useGameForm } from '@/composables/useGameForm';
-import { LANGUAGES } from '@/composables/languages';
+import { LANGUAGES } from '@/server/utils/languages';
+
 import Icon from '@/components/Icon.vue';
 
 // Component name for ESLint

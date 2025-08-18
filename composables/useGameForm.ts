@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import * as gameServices from '@/services/gameServices';
 
 export function useGameForm(initialData = null) {
     const gameForm = ref(
@@ -25,12 +26,7 @@ export function useGameForm(initialData = null) {
     async function updateGame() {
         isLoading.value = true;
         try {
-            const response = await fetch('/api/games/update', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(gameForm.value),
-            });
-            const result = await response.json();
+            const result = await gameServices.updateGame(gameForm.value);
             if (!result.success) {
                 error.value = result.error || 'Failed to update game';
             }
@@ -44,12 +40,7 @@ export function useGameForm(initialData = null) {
     async function createGame() {
         isLoading.value = true;
         try {
-            const response = await fetch('/api/games/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(gameForm.value),
-            });
-            const result = await response.json();
+            const result = await gameServices.createGame(gameForm.value);
             if (!result.success) {
                 error.value = result.error || 'Failed to create game';
             }

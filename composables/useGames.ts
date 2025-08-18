@@ -1,4 +1,5 @@
 import { ref, computed, onMounted } from 'vue';
+import * as gameServices from '@/services/gameServices';
 
 export function useGames() {
     const games = ref<any[]>([]);
@@ -21,9 +22,7 @@ export function useGames() {
     const fetchGames = async () => {
         try {
             isLoading.value = true;
-            const res = await fetch('/api/games');
-            const result = await res.json();
-
+            const result = await gameServices.fetchGames();
             console.log('Games fetched:', result);
 
             if (result.success) {
@@ -137,13 +136,7 @@ export function useGames() {
         if (pendingDeleteIds.value.length === 0) return;
         try {
             console.log('Deleting games with ids:', pendingDeleteIds.value);
-            const res = await fetch('/api/games/delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ids: pendingDeleteIds.value }),
-            });
-            const result = await res.json();
-            console.log('Delete result:', result);
+            const result = await gameServices.deleteGames(pendingDeleteIds.value);
             if (result.success) {
                 games.value = games.value.filter((g) => !pendingDeleteIds.value.includes(g.id));
                 selectedGames.value = selectedGames.value.filter((id) => !pendingDeleteIds.value.includes(id));

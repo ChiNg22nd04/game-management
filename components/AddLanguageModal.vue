@@ -40,7 +40,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import { LANGUAGES } from '@/composables/languages';
+import { LANGUAGES } from '@/server/utils/languages';
 
 const props = defineProps({
     show: Boolean,
