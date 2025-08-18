@@ -5,36 +5,20 @@ import { defineEventHandler, readBody } from 'h3';
 export default defineEventHandler(async (event) => {
     try {
         const body = await readBody(event);
-        const { id, ...gameData } = body;
-        console.log('Creating game with data:', id, gameData);
+        const { ...gameData } = body;
+        console.log('Game data.name:', gameData.name);
 
-        if (!id) {
-            return {
-                success: false,
-                error: 'Game ID is required',
-            };
+        const validNameItem = gameData.name.find((item: any) => item.language?.value?.trim() !== '');
+
+        if (!validNameItem) {
+            return { success: false, error: 'Game name cannot be empty' };
         }
 
-        // Check if game with this ID already exists
-        const existingGame = await db.collection('games').doc(id).get();
-        if (existingGame.exists) {
-            return {
-                success: false,
-                error: 'A game with this ID already exists',
-            };
-        }
-
-        // Create the new game document
-        await db
-            .collection('games')
-            .doc(id)
-            .set({
-                ...gameData,
-                createdAt: new Date().toISOString(),
-            });
+        const docRef = await db.collection('games').add({ ...gameData });
 
         return {
             success: true,
+            id: docRef.id,
             message: 'Game created successfully',
         };
     } catch (error) {

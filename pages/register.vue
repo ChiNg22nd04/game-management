@@ -17,7 +17,7 @@
                 <div class="border border-gray-300">
                     <table class="w-full">
                         <tbody>
-                            <tr class="border-b border-gray-300">
+                            <tr class="border-gray-300">
                                 <td class="w-1/4 border-r border-gray-300 bg-gray-50 px-6 py-4">
                                     <label for="gameCategory">Category</label>
                                 </td>
@@ -42,19 +42,6 @@
                                             <Icon name="angle-down" class="ml-1 inline-block h-4 w-4 text-black" />
                                         </span>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-1/4 border-r border-gray-300 bg-gray-50 px-6 py-4">
-                                    <label for="gameId">ID</label>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <input
-                                        id="gameId"
-                                        v-model="gameForm.id"
-                                        type="text"
-                                        class="w-full rounded-sm border border-gray-300 px-3 py-2"
-                                    />
                                 </td>
                             </tr>
                         </tbody>

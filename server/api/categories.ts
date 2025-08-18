@@ -4,8 +4,8 @@ import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
     try {
-        const categoriesCollection = db.collection('categories');
-        const snapshot = await categoriesCollection.get();
+        const docRef = db.collection('categories');
+        const snapshot = await docRef.get();
 
         const categories = snapshot.docs.map((doc) => ({
             id: doc.id,

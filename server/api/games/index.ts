@@ -5,22 +5,33 @@ import { defineEventHandler } from 'h3';
 export default defineEventHandler(async () => {
     try {
         // Lấy categories
-        const categoriesSnapshot = await db.collection('categories').get();
-        const categories = categoriesSnapshot.docs.map((doc) => ({
+        const catesDoc = await db.collection('categories').get();
+        const categories = catesDoc.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
         }));
 
-        const categoryMap = new Map(categories.map((c) => [c.id, c]));
+        // const categoryMap = new Map(categories.map((c) => [c.id, c]));
 
-        // Lấy games
-        const gamesSnapshot = await db.collection('games').get();
-        const gamesWithCategory = gamesSnapshot.docs.map((doc) => {
-            const gameData = doc.data();
+        // // Lấy games
+        const gamesDoc = await db.collection('games').get();
+        // const gamesWithCategory = gameDoc.docs.map((doc) => {
+        //     const gameData = doc.data();
+        //     return {
+        //         id: doc.id,
+        //         ...gameData,
+        //         category: categoryMap.get(gameData.categoryId) || null,
+        //     };
+        // });
+
+        const gamesWithCategory = gamesDoc.docs.map((doc) => {
+            const game = doc.data();
+            const category = categories.find((c) => c.id === game.categoryId) || null;
+
             return {
                 id: doc.id,
-                ...gameData,
-                category: categoryMap.get(gameData.categoryId) || null,
+                ...game,
+                category,
             };
         });
 
