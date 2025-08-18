@@ -1,4 +1,5 @@
 import { ref, onMounted } from 'vue';
+import * as categoryServices from '@/services/categoryServices';
 
 export function useCategories() {
     const categories = ref([]);
@@ -7,8 +8,7 @@ export function useCategories() {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch('/api/categories');
-            const result = await response.json();
+            const result = await categoryServices.fetchCategories();
             console.log('Fetched categories:', result);
             if (result.success) {
                 categories.value = result.data;
