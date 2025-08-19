@@ -29,3 +29,8 @@ export async function updateGame(payload: any) {
     });
     return await res.json();
 }
+
+export async function loadGame(id: string) {
+    const res = await fetch(`/api/games/${id}`);
+    return await res.json();
+}

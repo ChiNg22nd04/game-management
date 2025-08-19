@@ -195,6 +195,7 @@ import AddLanguageModal from '@/components/AddLanguageModal.vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useCategories } from '@/composables/useCategories';
 import { useGameForm } from '@/composables/useGameForm';
+import * as gameServices from '@/services/gameServices';
 import { LANGUAGES } from '@/server/utils/languages';
 
 import Icon from '@/components/Icon.vue';
@@ -292,7 +293,7 @@ const handleAddLanguage = (languageData) => {
 
 const loadGame = async (id) => {
     try {
-        const res = await $fetch(`/api/games/${id}`);
+        const res = await gameServices.loadGame(id);
         if (!res.success) {
             error.value = res.error || 'Game not found';
             return;
@@ -325,36 +326,12 @@ const loadGame = async (id) => {
 };
 
 const cancel = () => router.push('/games');
-// Override updateGame to format payload before sending
+// Only call updateGame from composable
 const updateGame = async () => {
-    const payload = {
-        id: gameForm.value.id,
-        categoryId: gameForm.value.categoryId,
-        name: gameForm.value.languages.map((lang) => ({
-            language: {
-                code: lang.code,
-                value: lang.nameValue || '',
-            },
-            isDefault: lang.isDefault,
-        })),
-    };
-    isLoading.value = true;
-    try {
-        const response = await fetch('/api/games/update', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-        });
-        const result = await response.json();
-        if (!result.success) {
-            error.value = result.error || 'Failed to update game';
-        }
-    } catch (_err) {
-        error.value = 'Error updating game';
-    } finally {
-        isLoading.value = false;
-    }
+    await updateGameComposable();
 };
+
+const updateGameComposable = useGameForm().updateGame;
 
 onMounted(async () => {
     if (gameId) {
