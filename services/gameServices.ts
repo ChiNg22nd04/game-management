@@ -14,7 +14,7 @@ export async function createGame(payload: any) {
 
 export async function deleteGames(ids: string[]) {
     const res = await fetch('/api/games/delete', {
-        method: 'POST',
+        method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids }),
     });
@@ -23,7 +23,7 @@ export async function deleteGames(ids: string[]) {
 
 export async function updateGame(payload: any) {
     const res = await fetch('/api/games/update', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
     });

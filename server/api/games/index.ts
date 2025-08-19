@@ -11,18 +11,7 @@ export default defineEventHandler(async () => {
             ...doc.data(),
         }));
 
-        // const categoryMap = new Map(categories.map((c) => [c.id, c]));
-
-        // // Lấy games
         const gamesDoc = await db.collection('games').get();
-        // const gamesWithCategory = gameDoc.docs.map((doc) => {
-        //     const gameData = doc.data();
-        //     return {
-        //         id: doc.id,
-        //         ...gameData,
-        //         category: categoryMap.get(gameData.categoryId) || null,
-        //     };
-        // });
 
         const gamesWithCategory = gamesDoc.docs.map((doc) => {
             const game = doc.data();
