@@ -26,7 +26,7 @@ export function useGameForm(initialData = null) {
     async function updateGame() {
         isLoading.value = true;
         try {
-            const { id, ...payload } = gameForm.value;
+            const { ...payload } = gameForm.value;
             const result = await gameServices.updateGame(payload);
             if (!result.success) {
                 error.value = result.error || 'Failed to update game';

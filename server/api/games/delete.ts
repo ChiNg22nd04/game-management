@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     console.log('Received request to delete game with ID:', ids);
 
     if (!ids) {
-        return { status: 400, body: { error: 'Game ID is required' } };
+        return { success: false, error: 'Game ID is required' };
     }
 
     try {
@@ -18,9 +18,9 @@ export default defineEventHandler(async (event) => {
             batch.delete(docRef);
         });
         await batch.commit();
-        return { status: 200, body: { message: 'Game deleted successfully' } };
+        return { success: true, message: 'Game deleted successfully' };
     } catch (error) {
         console.error('Error deleting game:', error);
-        return { status: 500, body: { error: 'Failed to delete game' } };
+        return { success: false, error: 'Failed to delete game' };
     }
 });
