@@ -1,9 +1,11 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import * as gameServices from '@/services/gameServices';
+import { LANGUAGES } from '@/server/utils/languages';
 
 export function useGameForm(initialData = null) {
     const gameForm = ref(
         initialData || {
+            id: null,
             categoryId: '',
             name: [
                 {
@@ -21,11 +23,13 @@ export function useGameForm(initialData = null) {
 
     const isLoading = ref(false);
     const error = ref<string | null>(null);
+    const selectedLanguage = ref<string>('');
 
     async function updateGame() {
         isLoading.value = true;
         try {
-            const result = await gameServices.updateGame(gameForm.value);
+            const { id, ...payload } = gameForm.value;
+            const result = await gameServices.updateGame(payload);
             if (!result.success) {
                 error.value = result.error || 'Failed to update game';
             }
@@ -39,7 +43,8 @@ export function useGameForm(initialData = null) {
     async function createGame() {
         isLoading.value = true;
         try {
-            const result = await gameServices.createGame(gameForm.value);
+            const { id, ...payload } = gameForm.value;
+            const result = await gameServices.createGame(payload);
             if (!result.success) {
                 error.value = result.error || 'Failed to create game';
             }
@@ -50,5 +55,96 @@ export function useGameForm(initialData = null) {
         }
     }
 
-    return { gameForm, isLoading, error, updateGame, createGame };
+    async function getGame(id: string) {
+        isLoading.value = true;
+        try {
+            const res = await gameServices.getGame(id);
+            if (!res.success) {
+                error.value = res.error || 'Game not found';
+                return;
+            }
+
+            const name = (res.data.name || []).map((item: any) => {
+                const lang = item.language || {};
+                const found = LANGUAGES.find((l) => l.code === item.language.code);
+                return {
+                    language: {
+                        code: lang.code,
+                        name: lang.value || '',
+                    },
+                    isDefault: item.isDefault || false,
+                };
+            });
+
+            gameForm.value = {
+                id: res.data.id,
+                categoryId: res.data.categoryId,
+                name: name.length
+                    ? name
+                    : [
+                          {
+                              language: { ...LANGUAGES[0], value: '' },
+                              isDefault: true,
+                          },
+                      ],
+            };
+
+            if (gameForm.value.name.length > 0) {
+                selectedLanguage.value = gameForm.value.name[0].language.code;
+            }
+        } catch {
+            error.value = 'Error loading game data';
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    function selectLanguage(code: string) {
+        selectedLanguage.value = code;
+    }
+
+    function getLanguageByCode(code: any) {
+        return gameForm.value.name.find((n) => n.language.code === code);
+    }
+
+    const selectedLanguageObj = computed(() => getLanguageByCode(selectedLanguage.value));
+
+    function toggleDefaultLanguage() {
+        if (!selectedLanguage.value) return;
+        gameForm.value.name.forEach((n) => (n.isDefault = false));
+        const lang = getLanguageByCode(selectedLanguage.value);
+        if (lang) lang.isDefault = true;
+    }
+
+    function deleteSelectedLanguage() {
+        if (!selectedLanguage.value) return;
+        const lang = getLanguageByCode(selectedLanguage.value);
+        if (!lang || lang.isDefault || gameForm.value.name.length <= 1) return;
+        gameForm.value.name = gameForm.value.name.filter((n) => n.language.code !== selectedLanguage.value);
+        selectedLanguage.value = '';
+    }
+
+    function addLanguage(lang: any) {
+        if (!lang) return;
+        gameForm.value.name.push({
+            language: { code: lang.code, value: '' },
+            isDefault: false,
+        });
+    }
+
+    return {
+        gameForm,
+        isLoading,
+        error,
+        selectedLanguage,
+        selectedLanguageObj,
+        getGame,
+        createGame,
+        updateGame,
+        selectLanguage,
+        toggleDefaultLanguage,
+        deleteSelectedLanguage,
+        addLanguage,
+        getLanguageByCode,
+    };
 }

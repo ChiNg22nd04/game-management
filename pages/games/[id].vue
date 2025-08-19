@@ -75,23 +75,23 @@
                             <div class="border-b border-gray-300 px-6 pb-4 font-medium">Input by Language</div>
                             <div>
                                 <div
-                                    v-for="language in gameForm.languages"
-                                    :key="language.code"
+                                    v-for="langObj in gameForm.name"
+                                    :key="langObj.language.code"
                                     :class="[
                                         'cursor-pointer px-6 py-2',
-                                        selectedLanguage === language.code
+                                        selectedLanguage === langObj.language.code
                                             ? 'flex items-center font-bold text-black'
                                             : 'text-gray-700',
                                         'hover:bg-gray-100',
                                     ]"
-                                    @click="selectLanguage(language.code)"
+                                    @click="selectLanguage(langObj.language.code)"
                                 >
                                     <span>
-                                        {{ language.name }}
+                                        {{ langObj.language.name || langObj.language.code }}
                                     </span>
                                     <Icon
                                         icon="fa-angle-right"
-                                        v-if="selectedLanguage === language.code"
+                                        v-if="selectedLanguage === langObj.language.code"
                                         name="angle-right"
                                         class="ml-2 h-4 w-4 text-black"
                                     />
@@ -124,13 +124,13 @@
                                     :disabled="
                                         !selectedLanguage ||
                                         getLanguageByCode(selectedLanguage)?.isDefault ||
-                                        gameForm.languages.length <= 1
+                                        gameForm.name.length <= 1
                                     "
                                     :class="[
                                         'flex items-center border-l border-gray-300 px-4 py-4 text-gray-600',
                                         selectedLanguage &&
                                         !getLanguageByCode(selectedLanguage)?.isDefault &&
-                                        gameForm.languages.length > 1
+                                        gameForm.name.length > 1
                                             ? 'cursor-pointer hover:text-red-600'
                                             : 'cursor-not-allowed opacity-50',
                                     ]"
@@ -211,136 +211,37 @@ const gameId = route.params.id;
 
 // Composables
 const { categories, fetchCategories } = useCategories();
-const { gameForm, isLoading, error } = useGameForm();
 
-// Language management state
-const selectedLanguage = ref('');
+const {
+    gameForm,
+    isLoading,
+    error,
+    selectedLanguage,
+    selectedLanguageObj,
+    getGame,
+    createGame,
+    updateGame,
+    selectLanguage,
+    toggleDefaultLanguage,
+    deleteSelectedLanguage,
+    addLanguage,
+    getLanguageByCode,
+} = useGameForm();
 const showLanguageModal = ref(false);
-const selectedNewLanguage = ref('');
-
-// Computed properties
-const availableLanguages = computed(() => {
-    return LANGUAGES.filter((lang) => !gameForm.value.languages?.some((gl) => gl.code === lang.code));
-});
-
-// Language management functions
-const selectLanguage = (code) => {
-    selectedLanguage.value = code;
-};
-
-const getLanguageByCode = (code) => {
-    return gameForm.value.languages?.find((lang) => lang.code === code);
-};
-
-// Add computed property for selected language object
-const selectedLanguageObj = computed({
-    get() {
-        return getLanguageByCode(selectedLanguage.value);
-    },
-    set(val) {
-        if (selectedLanguage.value && val && typeof val.nameValue !== 'undefined') {
-            const lang = getLanguageByCode(selectedLanguage.value);
-            if (lang) lang.nameValue = val.nameValue;
-        }
-    },
-});
-
-const toggleDefaultLanguage = () => {
-    if (!selectedLanguage.value) return;
-
-    const language = getLanguageByCode(selectedLanguage.value);
-    if (!language) return;
-
-    // Remove default from all languages
-    gameForm.value.languages.forEach((lang) => {
-        lang.isDefault = false;
-    });
-
-    // Set selected language as default
-    language.isDefault = true;
-};
-
-const deleteSelectedLanguage = () => {
-    if (!selectedLanguage.value) return;
-
-    const language = getLanguageByCode(selectedLanguage.value);
-    if (!language || language.isDefault || gameForm.value.languages.length <= 1) return;
-
-    gameForm.value.languages = gameForm.value.languages.filter((lang) => lang.code !== selectedLanguage.value);
-    selectedLanguage.value = '';
-};
 
 const openLanguageModal = () => {
     showLanguageModal.value = true;
-    selectedNewLanguage.value = '';
 };
 
 const closeLanguageModal = () => {
     showLanguageModal.value = false;
-    selectedNewLanguage.value = '';
-};
-
-const handleAddLanguage = (languageData) => {
-    if (!languageData) return;
-    gameForm.value.languages.push({
-        code: languageData.code,
-        name: languageData.name,
-        isDefault: false,
-        nameValue: '',
-    });
-    closeLanguageModal();
-};
-
-const loadGame = async (id) => {
-    try {
-        const res = await gameServices.loadGame(id);
-        if (!res.success) {
-            error.value = res.error || 'Game not found';
-            return;
-        }
-
-        const languages = (res.data.name || []).map((item) => {
-            const lang = item.language;
-            const found = LANGUAGES.find((l) => l.code === lang.code);
-            return {
-                code: lang.code,
-                name: found?.name || lang.code,
-                isDefault: item.isDefault === 'true' || item.isDefault === true,
-                nameValue: lang.value || '',
-            };
-        });
-
-        gameForm.value = {
-            id: res.data.id,
-            categoryId: res.data.categoryId,
-            languages: languages.length ? languages : [{ ...LANGUAGES[0], isDefault: true, nameValue: '' }],
-        };
-
-        // Auto-select first language
-        if (gameForm.value.languages?.length > 0) {
-            selectedLanguage.value = gameForm.value.languages[0].code;
-        }
-    } catch {
-        error.value = 'Error loading game data';
-    }
 };
 
 const cancel = () => router.push('/games');
-// Only call updateGame from composable
-const updateGame = async () => {
-    await updateGameComposable();
-};
-
-const updateGameComposable = useGameForm().updateGame;
 
 onMounted(async () => {
     if (gameId) {
-        await loadGame(gameId);
-    } else {
-        // For new games, auto-select first language
-        if (gameForm.value.languages?.length > 0) {
-            selectedLanguage.value = gameForm.value.languages[0].code;
-        }
+        await getGame(gameId);
     }
 });
 </script>

@@ -30,7 +30,10 @@ export async function updateGame(payload: any) {
     return await res.json();
 }
 
-export async function loadGame(id: string) {
-    const res = await fetch(`/api/games/${id}`);
+export async function getGame(payload: string) {
+    const res = await fetch(`/api/games/${payload}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    });
     return await res.json();
 }
