@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { navigateTo } from 'nuxt/app';
 import { useGames } from '@/composables/useGames';
 import { useCategories } from '@/composables/useCategories';
 import GameTable from '@/components/GameTable.vue';
@@ -90,7 +90,6 @@ defineOptions({
     name: 'GamesList',
 });
 
-const router = useRouter();
 const {
     isLoading,
     error,
@@ -118,7 +117,7 @@ const {
 const { categories } = useCategories();
 
 function navigateToRegister() {
-    router.push('/register');
+    navigateTo('/register');
 }
 // function applyFilters() {
 //     currentPage.value = 1;

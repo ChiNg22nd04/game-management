@@ -9,6 +9,7 @@
                         class="w-full appearance-none rounded-sm border border-gray-300 px-3 py-2 pr-8"
                         @change="$emit('update:selected-category', $event.target.value)"
                     >
+                        <option value="">Select a category</option>
                         <option v-for="category in categories" :key="category.id" :value="category.id">
                             {{ category.name }}
                         </option>
@@ -22,6 +23,7 @@
                 <label class="mb-1 block text-sm font-medium">Keyword</label>
                 <input
                     :value="searchQuery"
+                    placeholder="Input keyword"
                     class="w-full rounded-sm border border-gray-300 px-3 py-2"
                     type="text"
                     @input="$emit('update:search-query', $event.target.value)"

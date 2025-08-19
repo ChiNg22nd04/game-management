@@ -191,20 +191,20 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { navigateTo } from 'nuxt/app';
+import { useRoute } from 'vue-router';
 import AddLanguageModal from '@/components/AddLanguageModal.vue';
-import { useRouter, useRoute } from 'vue-router';
 import { useCategories } from '@/composables/useCategories';
 import { useGameForm } from '@/composables/useGameForm';
 
 import Icon from '@/components/Icon.vue';
 
+const route = useRoute();
 // Component name for ESLint
 defineOptions({
     name: 'GameDetail',
 });
 
-const router = useRouter();
-const route = useRoute();
 const gameId = route.params.id;
 
 // Composables
@@ -241,7 +241,7 @@ function handleAddLanguage(lang) {
     showLanguageModal.value = false;
 }
 
-const cancel = () => router.push('/games');
+const cancel = () => navigateTo('/games');
 
 onMounted(async () => {
     if (gameId) {

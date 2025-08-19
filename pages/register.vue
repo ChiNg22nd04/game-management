@@ -178,7 +178,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import AddLanguageModal from '@/components/AddLanguageModal.vue';
-import { useRouter } from 'vue-router';
+import { navigateTo } from 'nuxt/app';
 import { useCategories } from '@/composables/useCategories';
 import { useGameForm } from '@/composables/useGameForm';
 import { LANGUAGES } from '@/server/utils/languages';
@@ -189,8 +189,6 @@ import Icon from '@/components/Icon.vue';
 defineOptions({
     name: 'RegisterGame',
 });
-
-const router = useRouter();
 
 // Composables
 const { categories } = useCategories();
@@ -257,5 +255,5 @@ const handleAddLanguage = (languageData) => {
     closeLanguageModal();
 };
 
-const cancel = () => router.push('/games');
+const cancel = () => navigateTo('/games');
 </script>

@@ -1,5 +1,6 @@
 import { ref, computed, onMounted } from 'vue';
 import * as gameServices from '@/services/gameServices';
+import { navigateTo } from 'nuxt/app';
 
 export function useGames() {
     const games = ref<any[]>([]);
@@ -141,6 +142,7 @@ export function useGames() {
                 games.value = games.value.filter((g) => !pendingDeleteIds.value.includes(g.id));
                 selectedGames.value = selectedGames.value.filter((id) => !pendingDeleteIds.value.includes(id));
                 if (paginatedGames.value.length === 0 && currentPage.value > 1) currentPage.value--;
+                navigateTo('/games');
             } else {
                 console.error('Delete failed:', result.error);
             }

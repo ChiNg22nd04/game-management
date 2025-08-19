@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import * as gameServices from '@/services/gameServices';
 import { LANGUAGES } from '@/server/utils/languages';
+import { navigateTo } from 'nuxt/app';
 
 export function useGameForm(initialData = null) {
     const gameForm = ref(
@@ -31,6 +32,8 @@ export function useGameForm(initialData = null) {
             if (!result.success) {
                 error.value = result.error || 'Failed to update game';
             }
+            console.log('Game updated:', result);
+            await navigateTo('/games');
         } catch (_err) {
             error.value = 'Error updating game';
         } finally {
@@ -46,6 +49,8 @@ export function useGameForm(initialData = null) {
             if (!result.success) {
                 error.value = result.error || 'Failed to create game';
             }
+            console.log('Game created:', result);
+            await navigateTo('/games');
         } catch (_err) {
             error.value = 'Error creating game';
         } finally {

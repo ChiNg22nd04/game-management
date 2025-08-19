@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
+        "types": [
+            "@types/node",
+            "nuxt"
+        ],
         "target": "ES2020",
         "module": "ESNext",
         "moduleResolution": "node",
@@ -11,6 +15,12 @@
         "paths": {
             "@/*": [
                 "./*"
+            ],
+            "#app": [
+                "./.nuxt/types/app"
+            ],
+            "#app/*": [
+                "./.nuxt/types/app/*"
             ]
         }
     },

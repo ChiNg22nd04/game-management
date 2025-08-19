@@ -46,8 +46,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-const router = useRouter();
+import { navigateTo } from 'nuxt/app';
 
 defineProps({
     paginatedGames: {
@@ -83,6 +82,6 @@ defineProps({
 defineEmits(['edit']);
 
 function navigateToEditGame(gameId) {
-    router.push(`/games/${gameId}`);
+    navigateTo(`/games/${gameId}`);
 }
 </script>
