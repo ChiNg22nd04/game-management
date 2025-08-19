@@ -87,11 +87,11 @@
                                     @click="selectLanguage(langObj.language.code)"
                                 >
                                     <span>
-                                        {{ langObj.language.name || langObj.language.code }}
+                                        {{ renderLanguageName(langObj.language.code) }}
                                     </span>
                                     <Icon
-                                        icon="fa-angle-right"
                                         v-if="selectedLanguage === langObj.language.code"
+                                        icon="fa-angle-right"
                                         name="angle-right"
                                         class="ml-2 h-4 w-4 text-black"
                                     />
@@ -144,6 +144,7 @@
                                 <div class="mb-2">
                                     <label class="text-sm font-medium text-gray-700">Name</label>
                                 </div>
+                                {{ selectedLanguageObj.nameValue }}
                                 <input
                                     v-model="selectedLanguageObj.nameValue"
                                     type="text"
@@ -195,8 +196,6 @@ import AddLanguageModal from '@/components/AddLanguageModal.vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useCategories } from '@/composables/useCategories';
 import { useGameForm } from '@/composables/useGameForm';
-import * as gameServices from '@/services/gameServices';
-import { LANGUAGES } from '@/server/utils/languages';
 
 import Icon from '@/components/Icon.vue';
 
@@ -219,9 +218,10 @@ const {
     selectedLanguage,
     selectedLanguageObj,
     getGame,
-    createGame,
     updateGame,
     selectLanguage,
+    renderLanguageName,
+    availableLanguages,
     toggleDefaultLanguage,
     deleteSelectedLanguage,
     addLanguage,
@@ -236,6 +236,11 @@ const openLanguageModal = () => {
 const closeLanguageModal = () => {
     showLanguageModal.value = false;
 };
+
+function handleAddLanguage(lang) {
+    addLanguage(lang);
+    showLanguageModal.value = false;
+}
 
 const cancel = () => router.push('/games');
 

@@ -19,8 +19,6 @@ export function useGameForm(initialData = null) {
         },
     );
 
-    console.log('Game form initialized:', gameForm.value);
-
     const isLoading = ref(false);
     const error = ref<string | null>(null);
     const selectedLanguage = ref<string>('');
@@ -65,12 +63,11 @@ export function useGameForm(initialData = null) {
             }
 
             const name = (res.data.name || []).map((item: any) => {
-                const lang = item.language || {};
-                const found = LANGUAGES.find((l) => l.code === item.language.code);
+                console.log('item', item);
                 return {
                     language: {
-                        code: lang.code,
-                        name: lang.value || '',
+                        code: item.language.code,
+                        value: item.language.value || '',
                     },
                     isDefault: item.isDefault || false,
                 };
@@ -83,7 +80,7 @@ export function useGameForm(initialData = null) {
                     ? name
                     : [
                           {
-                              language: { ...LANGUAGES[0], value: '' },
+                              language: { code: LANGUAGES[0], value: '' },
                               isDefault: true,
                           },
                       ],
@@ -99,6 +96,12 @@ export function useGameForm(initialData = null) {
         }
     }
 
+    function renderLanguageName(code: string) {
+        console.log('Rendering language name for code:', code);
+        console.log(' languages:', LANGUAGES.find((l) => l.code === code)?.name || code);
+        return LANGUAGES.find((l) => l.code === code)?.name || code;
+    }
+
     function selectLanguage(code: string) {
         selectedLanguage.value = code;
     }
@@ -106,6 +109,11 @@ export function useGameForm(initialData = null) {
     function getLanguageByCode(code: any) {
         return gameForm.value.name.find((n) => n.language.code === code);
     }
+
+    const availableLanguages = computed(() => {
+        const usedCodes = gameForm.value.name.map((n) => n.language.code);
+        return LANGUAGES.filter((lang) => !usedCodes.includes(lang.code));
+    });
 
     const selectedLanguageObj = computed(() => getLanguageByCode(selectedLanguage.value));
 
@@ -142,6 +150,8 @@ export function useGameForm(initialData = null) {
         createGame,
         updateGame,
         selectLanguage,
+        renderLanguageName,
+        availableLanguages,
         toggleDefaultLanguage,
         deleteSelectedLanguage,
         addLanguage,
