@@ -97,8 +97,6 @@ export function useGameForm(initialData = null) {
     }
 
     function renderLanguageName(code: string) {
-        console.log('Rendering language name for code:', code);
-        console.log(' languages:', LANGUAGES.find((l) => l.code === code)?.name || code);
         return LANGUAGES.find((l) => l.code === code)?.name || code;
     }
 
@@ -107,7 +105,11 @@ export function useGameForm(initialData = null) {
     }
 
     function getLanguageByCode(code: any) {
-        return gameForm.value.name.find((n) => n.language.code === code);
+        const data = gameForm.value.name;
+        console.log('Getting language:', data);
+        const lang = data.find((n) => n.language.code === code);
+        console.log('Found language:', lang);
+        return lang;
     }
 
     const availableLanguages = computed(() => {
@@ -115,7 +117,16 @@ export function useGameForm(initialData = null) {
         return LANGUAGES.filter((lang) => !usedCodes.includes(lang.code));
     });
 
-    const selectedLanguageObj = computed(() => getLanguageByCode(selectedLanguage.value));
+    const selectedLanguageObj = computed(() => {
+        const lang = getLanguageByCode(selectedLanguage.value);
+        return {
+            language: {
+                code: lang?.language.code || '',
+                value: lang ? lang.language.value : '',
+            },
+            name: lang ? renderLanguageName(lang.language.code) : '',
+        };
+    });
 
     function toggleDefaultLanguage() {
         if (!selectedLanguage.value) return;

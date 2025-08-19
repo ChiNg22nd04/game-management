@@ -144,7 +144,7 @@
                                 <div class="mb-2">
                                     <label class="text-sm font-medium text-gray-700">Name</label>
                                 </div>
-                                {{ selectedLanguageObj.nameValue }}
+                                {{ selectedLanguageObj() }}
                                 <input
                                     v-model="selectedLanguageObj.nameValue"
                                     type="text"
