@@ -5,7 +5,9 @@ export default defineEventHandler(async (event) => {
     try {
         // Dynamic import to handle initialization errors
         const { db } = await import('../../utils/firebase-admin');
-
+        if (!db) {
+            throw new Error('Database connection is not initialized');
+        }
         // Lấy categories
         const catesDoc = await db.collection('categories').get();
         const categories = catesDoc.docs.map((doc) => ({
