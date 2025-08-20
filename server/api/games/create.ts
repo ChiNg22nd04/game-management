@@ -26,21 +26,9 @@ export default defineEventHandler(async (event) => {
 
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
 
-        if (process.env.NODE_ENV === 'development') {
-            return {
-                success: false,
-                error: errorMessage,
-                stack: error instanceof Error ? error.stack : undefined,
-            };
-        }
-
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'Internal Server Error',
-            data: {
-                success: false,
-                error: 'Failed to create game',
-            },
-        });
+        return {
+            success: false,
+            error: errorMessage,
+        };
     }
 });

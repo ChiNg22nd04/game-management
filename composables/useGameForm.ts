@@ -34,7 +34,7 @@ export function useGameForm(initialData = null) {
                 error.value = result.error || 'Failed to update game';
             }
             console.log('Game updated:', result);
-            // await navigateTo('/games');
+            await navigateTo('/games');
         } catch (_err) {
             error.value = 'Error updating game';
         } finally {
@@ -122,17 +122,6 @@ export function useGameForm(initialData = null) {
         const usedCodes = gameForm.value.name.map((n) => n.language.code);
         return LANGUAGES.filter((lang) => !usedCodes.includes(lang.code));
     });
-
-    // const selectedLanguageObj = computed(() => {
-    //     const lang = getLanguageByCode(selectedLanguage.value);
-    //     return {
-    //         language: {
-    //             code: lang?.language.code || '',
-    //             value: lang ? lang.language.value : '',
-    //         },
-    //         name: lang ? renderLanguageName(lang.language.code) : '',
-    //     };
-    // });
 
     const selectedLanguageObj = computed({
         get() {
