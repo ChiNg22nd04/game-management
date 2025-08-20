@@ -192,7 +192,7 @@ defineOptions({
 
 // Composables
 const { categories } = useCategories();
-const { gameForm, isLoading, error, createGame } = useGameForm();
+const { gameForm, isLoading, error, createGame, selectedLanguageObj } = useGameForm();
 
 // Language management state
 const selectedLanguage = ref('');
@@ -219,18 +219,6 @@ const getLanguageByCode = (code) => {
 };
 
 // Computed để bind v-model cho input name
-const selectedLanguageObj = computed({
-    get() {
-        const item = getLanguageByCode(selectedLanguage.value);
-        return item ? item.language : null;
-    },
-    set(val) {
-        const item = getLanguageByCode(selectedLanguage.value);
-        if (item && val && typeof val.value !== 'undefined') {
-            item.language.value = val.value;
-        }
-    },
-});
 
 const openLanguageModal = () => {
     showLanguageModal.value = true;

@@ -28,12 +28,13 @@ export function useGameForm(initialData = null) {
         isLoading.value = true;
         try {
             const { ...payload } = gameForm.value;
+            console.log('Updating game with payload:', payload);
             const result = await gameServices.updateGame(payload);
             if (!result.success) {
                 error.value = result.error || 'Failed to update game';
             }
             console.log('Game updated:', result);
-            await navigateTo('/games');
+            // await navigateTo('/games');
         } catch (_err) {
             error.value = 'Error updating game';
         } finally {
@@ -122,15 +123,28 @@ export function useGameForm(initialData = null) {
         return LANGUAGES.filter((lang) => !usedCodes.includes(lang.code));
     });
 
-    const selectedLanguageObj = computed(() => {
-        const lang = getLanguageByCode(selectedLanguage.value);
-        return {
-            language: {
-                code: lang?.language.code || '',
-                value: lang ? lang.language.value : '',
-            },
-            name: lang ? renderLanguageName(lang.language.code) : '',
-        };
+    // const selectedLanguageObj = computed(() => {
+    //     const lang = getLanguageByCode(selectedLanguage.value);
+    //     return {
+    //         language: {
+    //             code: lang?.language.code || '',
+    //             value: lang ? lang.language.value : '',
+    //         },
+    //         name: lang ? renderLanguageName(lang.language.code) : '',
+    //     };
+    // });
+
+    const selectedLanguageObj = computed({
+        get() {
+            const item = getLanguageByCode(selectedLanguage.value);
+            return item ? item.language : null;
+        },
+        set(val) {
+            const item = getLanguageByCode(selectedLanguage.value);
+            if (item && val && typeof val.value !== 'undefined') {
+                item.language.value = val.value;
+            }
+        },
     });
 
     function toggleDefaultLanguage() {

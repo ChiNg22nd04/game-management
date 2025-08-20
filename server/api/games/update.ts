@@ -5,8 +5,10 @@ import { defineEventHandler, readBody } from 'h3';
 export default defineEventHandler(async (event) => {
     try {
         const body = await readBody(event);
-        const { id, languages, ...data } = body;
-        console.log('Updating game with data:', id, languages, data);
+        const { id, name, ...data } = body;
+        console.log('Updating game with data:', data);
+        console.log('Updating game with id:', id);
+        console.log('Updating game with name:', name);
 
         if (!id) {
             return {
@@ -15,9 +17,10 @@ export default defineEventHandler(async (event) => {
             };
         }
 
-        if (languages) {
-            data.name = languages.map((lang: any) => ({
-                language: { code: lang.code, value: lang.nameValue || '' },
+        if (name) {
+            console.log('name provided:', name);
+            data.name = name.map((lang: any) => ({
+                language: { code: lang.code, value: lang.value || '' },
                 isDefault: lang.isDefault || false,
             }));
         }

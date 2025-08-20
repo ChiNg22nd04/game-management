@@ -145,7 +145,7 @@
                                     <label class="text-sm font-medium text-gray-700">Name</label>
                                 </div>
                                 <input
-                                    v-model="selectedLanguageObj.language.value"
+                                    v-model="selectedLanguageObj.value"
                                     type="text"
                                     class="rounded-sm border border-gray-300 px-3 py-2"
                                     placeholder="Enter game name"
