@@ -1,6 +1,20 @@
 export async function fetchGames() {
-    const res = await fetch('/api/games');
-    return await res.json();
+    try {
+        const res = await fetch('/api/games');
+
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error('Error in fetchGames:', error);
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Network error occurred',
+        };
+    }
 }
 
 export async function createGame(payload: any) {

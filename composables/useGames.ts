@@ -28,12 +28,15 @@ export function useGames() {
 
             if (result.success) {
                 games.value = result.data || [];
+                error.value = null; // Clear any previous errors
             } else {
-                error.value = result.error || 'Unknown error';
+                error.value = result.error || 'Unknown error occurred';
+                games.value = [];
             }
         } catch (err) {
-            error.value = 'Failed to fetch games';
             console.error('Error fetching games:', err);
+            error.value = 'Failed to connect to server. Please try again later.';
+            games.value = [];
         } finally {
             isLoading.value = false;
             filteredGames();
