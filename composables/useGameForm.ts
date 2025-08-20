@@ -102,10 +102,10 @@ export function useGameForm(initialData = null) {
         }
     }
 
-    function renderLanguageName(code: string) {
-        return LANGUAGES.find((l) => l.code === code)?.name || code;
-    }
-
+    const renderLanguageName = (code: any) => {
+        const lang = LANGUAGES.find((l) => l.code === code);
+        return lang ? lang.name : code;
+    };
     function selectLanguage(code: string) {
         selectedLanguage.value = code;
     }

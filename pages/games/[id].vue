@@ -22,7 +22,7 @@
                                     <label for="gameCategory">Category</label>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="relative w-48">
+                                    <div class="relative">
                                         <select
                                             v-model="gameForm.categoryId"
                                             class="w-full appearance-none rounded-sm border border-gray-300 px-3 py-2 pr-8"
@@ -147,7 +147,7 @@
                                 <input
                                     v-model="selectedLanguageObj.value"
                                     type="text"
-                                    class="rounded-sm border border-gray-300 px-3 py-2"
+                                    class="w-full rounded-sm border border-gray-300 px-3 py-2"
                                     placeholder="Enter game name"
                                 />
                             </div>
@@ -159,7 +159,7 @@
             <!-- Add Language Modal as component -->
             <AddLanguageModal
                 :show="showLanguageModal"
-                :available-languages="availableLanguages"
+                :available-languages="availableLanguages.value"
                 @close="closeLanguageModal"
                 @add="handleAddLanguage"
             />

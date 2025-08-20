@@ -73,11 +73,11 @@
                                     @click="selectLanguage(item.language.code)"
                                 >
                                     <span>
-                                        {{ getLanguageName(item.language.code) }}
+                                        {{ renderLanguageName(item.language.code) }}
                                     </span>
                                     <Icon
-                                        icon="fa-angle-right"
                                         v-if="selectedLanguage === item.language.code"
+                                        icon="fa-angle-right"
                                         name="angle-right"
                                         class="ml-2 h-4 w-4 text-black"
                                     />
@@ -181,7 +181,6 @@ import AddLanguageModal from '@/components/AddLanguageModal.vue';
 import { navigateTo } from 'nuxt/app';
 import { useCategories } from '@/composables/useCategories';
 import { useGameForm } from '@/composables/useGameForm';
-import { LANGUAGES } from '@/server/utils/languages';
 
 import Icon from '@/components/Icon.vue';
 
@@ -192,33 +191,21 @@ defineOptions({
 
 // Composables
 const { categories } = useCategories();
-const { gameForm, isLoading, error, createGame, selectedLanguageObj } = useGameForm();
+const {
+    gameForm,
+    isLoading,
+    error,
+    createGame,
+    selectedLanguageObj,
+    addLanguage,
+    availableLanguages,
+    selectLanguage,
+    renderLanguageName,
+} = useGameForm();
 
-// Language management state
 const selectedLanguage = ref('');
 const showLanguageModal = ref(false);
 const selectedNewLanguage = ref('');
-
-// Computed properties
-const availableLanguages = computed(() => {
-    return LANGUAGES.filter((lang) => !gameForm.value.name?.some((item) => item.language.code === lang.code));
-});
-
-// Language management functions
-const selectLanguage = (code) => {
-    selectedLanguage.value = code;
-};
-
-const getLanguageName = (code) => {
-    const lang = LANGUAGES.find((l) => l.code === code);
-    return lang ? lang.name : code;
-};
-
-const getLanguageByCode = (code) => {
-    return gameForm.value.name?.find((item) => item.language.code === code);
-};
-
-// Computed để bind v-model cho input name
 
 const openLanguageModal = () => {
     showLanguageModal.value = true;
@@ -230,18 +217,10 @@ const closeLanguageModal = () => {
     selectedNewLanguage.value = '';
 };
 
-const handleAddLanguage = (languageData) => {
-    if (!languageData) return;
-    console.log('Adding language:', languageData);
-    gameForm.value.name.push({
-        language: {
-            code: languageData.code,
-            value: '',
-        },
-        isDefault: false,
-    });
+function handleAddLanguage(lang) {
+    addLanguage(lang);
     closeLanguageModal();
-};
+}
 
 const cancel = () => navigateTo('/games');
 </script>

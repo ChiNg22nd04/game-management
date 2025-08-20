@@ -41,13 +41,12 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { LANGUAGES } from '@/server/utils/languages';
+import { useGameForm } from '@/composables/useGameForm';
+
+const { availableLanguages } = useGameForm();
 
 const props = defineProps({
     show: Boolean,
-    availableLanguages: {
-        type: Array,
-        default: () => [],
-    },
 });
 const emit = defineEmits(['close', 'add']);
 
