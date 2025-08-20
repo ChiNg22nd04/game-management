@@ -1,11 +1,9 @@
 // server/api/categories.ts
+import { db } from '../utils/firebase-admin';
 import { defineEventHandler, createError } from 'h3';
 
 export default defineEventHandler(async (event) => {
     try {
-        // Dynamic import to handle initialization errors
-        const { db } = await import('../utils/firebase-admin');
-
         const docRef = db.collection('categories');
         const snapshot = await docRef.get();
 

@@ -1,11 +1,9 @@
 // server/api/games/create.ts
 import { defineEventHandler, readBody, createError } from 'h3';
+import { db } from '../../utils/firebase-admin';
 
 export default defineEventHandler(async (event) => {
     try {
-        // Dynamic import to handle initialization errors
-        const { db } = await import('../../utils/firebase-admin');
-
         const body = await readBody(event);
         const { ...gameData } = body;
         console.log('Game data.name:', gameData.name);

@@ -6,5 +6,5 @@
 
 <script setup>
 import { navigateTo } from 'nuxt/app';
-navigateTo('/games'); // Redirect to games page on load
+navigateTo('/games');
 </script>
