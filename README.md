@@ -1,75 +1,41 @@
-# Nuxt Minimal Starter
+# Game Management
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Overview
 
-## Setup
+A web application for managing games, built with Nuxt 3 and TailwindCSS. The project supports listing, searching, filtering, registering, and deleting games, with data stored in Firebase. Bun is used as the package manager, and ESLint ensures code quality. The app is deployed on Vercel.
 
-Make sure to install dependencies:
+## Features
 
-```bash
-# npm
-npm install
+- **Game List Page**
+    - View all games in a paginated table
+    - Search and filter games by category and keyword
+    - Multi-select and bulk delete games
+    - Register new games via a dedicated button
+- **Game Registration Page**
+    - Add new games to the database
+- **API**
+    - Built with Nuxt 2 server API routes
+    - CRUD operations for games
+- **Database**
+    - Uses Firebase for data storage
+- **UI/UX**
+    - Styled with TailwindCSS
 
-# pnpm
-pnpm install
+## Tech Stack
 
-# yarn
-yarn install
+- [Nuxt 3](https://nuxt.com/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Firebase](https://firebase.google.com/)
+- [Bun](https://bun.sh/) (package manager)
+- [ESLint](https://eslint.org/) (code formatting)
+- [Vercel](https://vercel.com/) (deployment)
 
-# bun
-bun install
-```
+## Project Structure
 
-## Development Server
+- `pages/` — Nuxt pages (Game List, Game Registration)
+- `components/` — UI components (Table, Modals, Pagination, etc.)
+- `composables/` — Reusable composition functions
+- `server/api/` — Nuxt 2 API routes for games
+- `services/` — Service layer for Firebase operations
+- `assets/` — Styles and static assets
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
