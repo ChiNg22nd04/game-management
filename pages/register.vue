@@ -144,7 +144,7 @@
 
             <!-- Add Language Modal as component -->
             <AddLanguageModal
-                :available-languages="availableLanguages"
+                :available-languages="availableLanguages.value"
                 :show="showLanguageModal"
                 @close="closeLanguageModal"
                 @add="handleAddLanguage"
@@ -196,14 +196,15 @@ const {
     isLoading,
     error,
     createGame,
+    selectLanguage,
+    selectedLanguage,
     selectedLanguageObj,
     addLanguage,
     availableLanguages,
-    selectLanguage,
     renderLanguageName,
+    getLanguageByCode,
 } = useGameForm();
 
-const selectedLanguage = ref('');
 const showLanguageModal = ref(false);
 const selectedNewLanguage = ref('');
 

@@ -120,6 +120,7 @@ export function useGameForm(initialData = null) {
 
     const availableLanguages = computed(() => {
         const usedCodes = gameForm.value.name.map((n) => n.language.code);
+        console.log('Used language codes:', usedCodes);
         return LANGUAGES.filter((lang) => !usedCodes.includes(lang.code));
     });
 
