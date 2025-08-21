@@ -30,11 +30,107 @@ A web application for managing games, built with Nuxt 3 and TailwindCSS. The pro
 - [ESLint](https://eslint.org/) (code formatting)
 - [Vercel](https://vercel.com/) (deployment)
 
-## Project Structure
+## Getting Started
 
-- `pages/` — Nuxt pages (Game List, Game Registration)
-- `components/` — UI components (Table, Modals, Pagination, etc.)
-- `composables/` — Reusable composition functions
-- `server/api/` — Nuxt 3 API routes for games
-- `services/` — Service layer for Firebase operations
-- `assets/` — Styles and static assets
+<<<<<<< HEAD
+## Getting Started
+
+```bash
+# Install dependencies
+bun install
+
+# Start development server
+bun dev
+
+# Build for production
+bun build
+
+# Start production server
+bun start
+```
+=======
+```bash
+# Install dependencies
+bun install
+
+# Start development server
+bun dev
+
+# Build for production
+bun build
+
+# Start production server
+bun start
+```
+
+## Project Architecture
+
+### Frontend Architecture
+
+- **Framework**: Nuxt 3 (Vue.js 3 + SSR/SSG)
+- **Styling**: TailwindCSS for utility-first CSS
+- **State Management**: Composables pattern with reactive state
+- **Icons**: FontAwesome integration
+
+### Backend Architecture
+
+- **API Layer**: Nuxt 3 Server API routes (`/server/api/`)
+- **Database**: Firebase Firestore (NoSQL document database)
+- **Authentication**: Firebase Admin SDK
+- **Deployment**: Vercel with serverless functions
+
+### Project Structure
+
+```
+app.vue                     # Root Vue component
+nuxt.config.ts             # Nuxt 3 configuration
+package.json               # Dependencies and scripts
+tailwind.config.js         # TailwindCSS configuration
+
+assets/
+  css/
+    tailwind.css           # Global styles and Tailwind imports
+
+components/
+  AddLanguageModal.vue     # Modal for adding new languages
+  DeleteModal.vue          # Confirmation modal for deletions
+  GameTable.vue           # Main table component for games
+  Icon.vue                # FontAwesome icon wrapper
+  Pagination.vue          # Pagination component
+  SearchFilter.vue        # Search and filter controls
+
+composables/
+  useCategories.ts        # Category management composable
+  useGameForm.ts          # Game form state management
+  useGames.ts             # Game data fetching composable
+
+pages/
+  index.vue               # Home page (redirects to games)
+  register.vue            # Game registration form
+  games/
+    index.vue             # Games list page
+    [id].vue              # Individual game detail page
+
+server/
+  api/
+    categories.ts         # Categories API endpoints
+    firebase-test.ts      # Firebase connection test
+    games/
+      index.ts            # GET all games, POST new game
+      [id].ts             # GET, PUT, DELETE specific game
+      create.ts           # Game creation endpoint
+      delete.ts           # Game deletion endpoint
+      update.ts           # Game update endpoint
+  utils/
+    firebase-admin.ts     # Firebase Admin SDK setup
+    languages.ts          # Language utilities
+
+services/
+  categoryServices.ts     # Category-related business logic
+  gameServices.ts         # Game-related business logic
+
+plugins/
+  fontawesome.ts          # FontAwesome plugin configuration
+```
+```
+>>>>>>> 96fcbbf (update readme + add server/secrets/ to .gitignore and remove from git tracking)

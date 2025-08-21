@@ -23,8 +23,8 @@ logs
 .env.*
 !.env.example
 
-# Firebase secrets
-server/secrets/firebase-service-account.json
+# Firebase secrets - ignore entire secrets directory
+server/secrets/
 
 .history
 PROJECT_STRUCTURE.md
