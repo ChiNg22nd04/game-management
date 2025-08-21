@@ -35,6 +35,6 @@ A web application for managing games, built with Nuxt 3 and TailwindCSS. The pro
 - `pages/` — Nuxt pages (Game List, Game Registration)
 - `components/` — UI components (Table, Modals, Pagination, etc.)
 - `composables/` — Reusable composition functions
-- `server/api/` — Nuxt 2 API routes for games
+- `server/api/` — Nuxt 3 API routes for games
 - `services/` — Service layer for Firebase operations
 - `assets/` — Styles and static assets
