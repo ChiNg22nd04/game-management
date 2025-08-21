@@ -14,7 +14,7 @@ A web application for managing games, built with Nuxt 3 and TailwindCSS. The pro
 - **Game Registration Page**
     - Add new games to the database
 - **API**
-    - Built with Nuxt 2 server API routes
+    - Built with Nuxt 3 server API routes
     - CRUD operations for games
 - **Database**
     - Uses Firebase for data storage
@@ -38,4 +38,3 @@ A web application for managing games, built with Nuxt 3 and TailwindCSS. The pro
 - `server/api/` — Nuxt 2 API routes for games
 - `services/` — Service layer for Firebase operations
 - `assets/` — Styles and static assets
-
