@@ -33,22 +33,14 @@ A web application for managing games, built with Nuxt 3 and TailwindCSS. The pro
 ## Getting Started
 
 <<<<<<< HEAD
-## Getting Started
 
-```bash
-# Install dependencies
-bun install
+- `pages/` — Nuxt pages (Game List, Game Registration)
+- `components/` — UI components (Table, Modals, Pagination, etc.)
+- `composables/` — Reusable composition functions
+- `server/api/` — Nuxt 3 API routes for games
+- `services/` — Service layer for Firebase operations
+- # `assets/` — Styles and static assets
 
-# Start development server
-bun dev
-
-# Build for production
-bun build
-
-# Start production server
-bun start
-```
-=======
 ```bash
 # Install dependencies
 bun install
@@ -132,5 +124,5 @@ services/
 plugins/
   fontawesome.ts          # FontAwesome plugin configuration
 ```
-```
->>>>>>> 96fcbbf (update readme + add server/secrets/ to .gitignore and remove from git tracking)
+
+> > > > > > > 96fcbbf (update readme + add server/secrets/ to .gitignore and remove from git tracking)
