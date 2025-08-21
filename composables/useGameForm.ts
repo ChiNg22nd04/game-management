@@ -49,6 +49,7 @@ export function useGameForm(initialData = null) {
             const result = await gameServices.createGame(payload);
             if (!result.success) {
                 error.value = result.error || 'Failed to create game';
+                return;
             }
             console.log('Game created:', result);
             await navigateTo('/games');
