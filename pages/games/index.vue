@@ -119,9 +119,6 @@ const { categories } = useCategories();
 function navigateToRegister() {
     navigateTo('/register');
 }
-// function applyFilters() {
-//     currentPage.value = 1;
-// }
 
 function prevPage() {
     if (currentPage.value > 1) currentPage.value--;
