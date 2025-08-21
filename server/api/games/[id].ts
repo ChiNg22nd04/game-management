@@ -24,15 +24,18 @@ export default defineEventHandler(async (event) => {
 
         return {
             success: true,
+            message: 'Game retrieved successfully',
             data: {
                 id: gameDoc.id,
                 ...gameDoc.data(),
             },
         };
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+
         return {
             success: false,
-            error: error instanceof Error ? error.message : String(error),
+            error: errorMessage,
         };
     }
 });

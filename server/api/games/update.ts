@@ -23,9 +23,11 @@ export default defineEventHandler(async (event) => {
             message: 'Game updated successfully',
         };
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+
         return {
             success: false,
-            error: error instanceof Error ? error.message : String(error),
+            error: errorMessage,
         };
     }
 });

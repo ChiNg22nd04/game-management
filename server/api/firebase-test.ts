@@ -13,11 +13,10 @@ export default defineEventHandler(async (event) => {
             timestamp: new Date().toISOString(),
         };
     } catch (error) {
-        // If there's an error, return it
+        const message = error instanceof Error ? error.message : 'Firebase connection failed';
         return {
             success: false,
-            message: 'Firebase connection failed',
-            error: error instanceof Error ? error.message : String(error),
+            error: message,
         };
     }
 });

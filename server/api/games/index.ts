@@ -30,9 +30,11 @@ export default defineEventHandler(async (event) => {
         };
     } catch (error) {
         console.error('Error in /api/games:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+
         return {
             success: false,
-            error: error instanceof Error ? error.message : String(error),
+            error: errorMessage,
         };
     }
 });

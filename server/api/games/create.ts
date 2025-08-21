@@ -11,7 +11,10 @@ export default defineEventHandler(async (event) => {
         const validNameItem = gameData.name.find((item: any) => item.language?.value?.trim() !== '');
 
         if (!validNameItem) {
-            return { success: false, error: 'Game name cannot be empty' };
+            return {
+                success: false,
+                error: 'Game name cannot be empty',
+            };
         }
 
         const docRef = await db.collection('games').add({ ...gameData });
