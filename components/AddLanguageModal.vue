@@ -2,7 +2,7 @@
     <div v-if="show" class="mb-6 border border-gray-300">
         <div class="flex items-center justify-between border-b border-gray-300 px-6 py-3">
             <h3 class="font-medium">Add Language</h3>
-            <button class="text-gray-500 hover:text-gray-700" @click="$emit('close')">
+            <button class="text-gray-500 hover:text-gray-700" @click="handleClose">
                 <Icon name="close" class="mr-1 h-4 w-4 text-black" />
             </button>
         </div>
@@ -39,15 +39,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useGameForm } from '@/composables/useGameForm';
-
-const { availableLanguages } = useGameForm();
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     show: Boolean,
+    availableLanguages: Array,
 });
 const emit = defineEmits(['close', 'add']);
 
 const selectedNewLanguage = ref('');
+
+function handleClose() {
+    selectedNewLanguage.value = '';
+    emit('close');
+}
 </script>

@@ -144,7 +144,7 @@
 
             <!-- Add Language Modal as component -->
             <AddLanguageModal
-                :available-languages="availableLanguages.value"
+                :available-languages="availableLanguages"
                 :show="showLanguageModal"
                 @close="closeLanguageModal"
                 @add="handleAddLanguage"
@@ -221,6 +221,7 @@ function handleAddLanguage(lang) {
     console.log('Name:', lang.name);
     addLanguage(lang);
     closeLanguageModal();
+    selectLanguage(lang.code);
 }
 
 const cancel = () => navigateTo('/games');
