@@ -13,7 +13,7 @@
                     class="mb-4 flex w-full appearance-none rounded-sm border border-gray-300 px-3 py-2"
                 >
                     <option value="">Select a language</option>
-                    <option v-for="lang in availableLanguages" :key="lang.code" :value="lang.code">
+                    <option v-for="lang in availableLanguages" :key="lang.code" :value="lang">
                         {{ lang.name }}
                     </option>
                 </select>
@@ -28,7 +28,7 @@
                         'flex items-center rounded-sm border border-gray-300 px-6 py-1',
                         selectedNewLanguage ? 'hover:bg-gray-50' : 'cursor-not-allowed opacity-50',
                     ]"
-                    @click="addLanguage"
+                    @click="$emit('add', selectedNewLanguage)"
                 >
                     <Icon name="add" class="mr-1 h-4 w-4 text-black" />
                     Add
@@ -39,8 +39,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { LANGUAGES } from '@/server/utils/languages';
+import { ref } from 'vue';
 import { useGameForm } from '@/composables/useGameForm';
 
 const { availableLanguages } = useGameForm();
@@ -51,19 +50,4 @@ const props = defineProps({
 const emit = defineEmits(['close', 'add']);
 
 const selectedNewLanguage = ref('');
-
-watch(
-    () => props.show,
-    (val) => {
-        if (!val) selectedNewLanguage.value = '';
-    },
-);
-
-const addLanguage = () => {
-    if (!selectedNewLanguage.value) return;
-    const languageData = LANGUAGES.find((lang) => lang.code === selectedNewLanguage.value);
-    if (!languageData) return;
-    emit('add', languageData);
-    selectedNewLanguage.value = '';
-};
 </script>

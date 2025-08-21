@@ -107,6 +107,7 @@ export function useGameForm(initialData = null) {
         const lang = LANGUAGES.find((l) => l.code === code);
         return lang ? lang.name : code;
     };
+
     function selectLanguage(code: string) {
         selectedLanguage.value = code;
     }
@@ -155,6 +156,7 @@ export function useGameForm(initialData = null) {
 
     function addLanguage(lang: any) {
         if (!lang) return;
+        console.log('Adding language:', lang);
         gameForm.value.name.push({
             language: { code: lang.code, value: '' },
             isDefault: false,

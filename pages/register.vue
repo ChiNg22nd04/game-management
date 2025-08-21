@@ -206,19 +206,19 @@ const {
 } = useGameForm();
 
 const showLanguageModal = ref(false);
-const selectedNewLanguage = ref('');
 
 const openLanguageModal = () => {
     showLanguageModal.value = true;
-    selectedNewLanguage.value = '';
 };
 
 const closeLanguageModal = () => {
     showLanguageModal.value = false;
-    selectedNewLanguage.value = '';
 };
 
 function handleAddLanguage(lang) {
+    console.log('Adding language raw:', lang);
+    console.log('Code:', lang.code);
+    console.log('Name:', lang.name);
     addLanguage(lang);
     closeLanguageModal();
 }
